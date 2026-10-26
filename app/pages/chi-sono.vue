@@ -11,19 +11,21 @@ usePageSeo({ title: page.value.title, description: page.value.description, image
   <SiteContainer v-if="page" class="page">
     <PageIntro :title="page.title" />
     <div class="layout">
-      <NuxtImg
-        format="webp"
-        v-if="page.image"
-        :src="page.image"
-        :alt="page.imageAlt ?? ''"
-        width="800"
-        height="1000"
-        fit="cover"
-        sizes="xs:100vw md:40vw lg:480px"
-        class="portrait"
-      />
-      <ProseContent :value="page" />
+      <InkReveal v-if="page.image" class="portrait">
+        <NuxtImg
+          format="webp"
+          :src="page.image"
+          :alt="page.imageAlt ?? ''"
+          width="800"
+          height="1000"
+          fit="cover"
+          sizes="xs:100vw md:40vw lg:480px"
+          class="image"
+        />
+      </InkReveal>
+      <ProseMotion :value="page" />
     </div>
+    <ScrollHighlight v-if="page.description" :text="page.description" class="statement" />
   </SiteContainer>
 </template>
 
@@ -48,8 +50,23 @@ usePageSeo({ title: page.value.title, description: page.value.description, image
 .portrait {
   /* su mobile non deve spingere il testo sotto la piega */
   width: min(100%, 16rem);
+}
+
+.image {
+  width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
+}
+
+@media (min-width: 900px) {
+  .portrait {
+    position: sticky;
+    top: 2rem;
+  }
+}
+
+.statement {
+  margin-top: var(--space-section);
 }
 
 @media (min-width: 900px) {

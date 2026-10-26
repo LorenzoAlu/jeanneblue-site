@@ -4,6 +4,7 @@ defineProps<{ title: string, lead?: string }>()
 const root = ref<HTMLElement>()
 
 useMotion(root, ({ gsap }) => {
+  if (!root.value!.querySelector('.lead')) return
   gsap.fromTo('.lead', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', delay: 0.45 })
 })
 </script>

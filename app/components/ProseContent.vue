@@ -21,6 +21,12 @@ defineProps<{ value: PagineCollectionItem | FaqCollectionItem }>()
   margin-top: 2.5rem;
 }
 
+.prose :deep(h2 a),
+.prose :deep(h3 a) {
+  color: inherit;
+  text-decoration: none;
+}
+
 .prose :deep(h3) {
   margin-top: 2rem;
   font-size: var(--text-base);
