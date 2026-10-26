@@ -7,6 +7,9 @@ const { site, contact } = useAppConfig()
     <SiteContainer class="inner">
       <div>
         <p class="name">{{ site.name }}</p>
+        <p>
+          <a :href="`https://www.instagram.com/${contact.instagram}/`" rel="noopener">@{{ contact.instagram }}</a>
+        </p>
         <address>
           {{ contact.studio.name }}<br>
           {{ contact.studio.street }}, {{ contact.studio.postalCode }} {{ contact.studio.city }}

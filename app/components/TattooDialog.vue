@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { TatuaggiCollectionItem } from '@nuxt/content'
+import { joinURL } from 'ufo'
 
 const props = defineProps<{ item: TatuaggiCollectionItem | null }>()
 const emit = defineEmits<{ close: [] }>()
 
 const dialog = ref<HTMLDialogElement>()
+const { baseURL } = useRuntimeConfig().app
 
 watch(
   () => props.item,
@@ -32,7 +34,7 @@ function onClick(event: MouseEvent) {
       <!-- File originale, non ipx: il dialog non esiste al prerender, quindi le varianti
            ridimensionate non verrebbero generate. Le foto in public/img vanno già esportate
            a ~1600px. -->
-      <img :src="item.image" :alt="item.alt" width="800" height="1000" class="image">
+      <img :src="joinURL(baseURL, item.image)" :alt="item.alt" width="800" height="1000" class="image">
       <div class="meta">
         <p id="tattoo-dialog-title" class="title">{{ item.stile }} · {{ item.zona }}</p>
         <p class="date">{{ date }}</p>

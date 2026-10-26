@@ -3,6 +3,7 @@ const { data: tatuaggi } = await useAsyncData('tatuaggi', () =>
   queryCollection('tatuaggi').order('data', 'DESC').all(),
 )
 
+const { contact } = useAppConfig()
 const stili = computed(() => [...new Set(tatuaggi.value?.map(t => t.stile))].sort())
 const stile = ref<string | null>(null)
 const visibili = computed(() =>
@@ -18,16 +19,29 @@ usePageSeo({
 
 <template>
   <SiteContainer class="page">
-    <PageIntro title="Tatuaggi">
+    <PageIntro
+      title="Tatuaggi"
+      lead="Una selezione dei lavori degli ultimi mesi. Ogni disegno è nato per la persona che lo porta."
+    >
       <TattooFilter v-if="stili.length > 1" v-model="stile" :options="stili" />
     </PageIntro>
     <p class="visually-hidden" aria-live="polite">{{ visibili.length }} tatuaggi</p>
     <TattooGrid :items="visibili" priority />
+    <p class="more">
+      Gli altri lavori sono su
+      <a :href="`https://www.instagram.com/${contact.instagram}/`" rel="noopener">Instagram</a>.
+      Ti piace qualcosa? <NuxtLink to="/contatti">Scrivimi</NuxtLink>.
+    </p>
   </SiteContainer>
 </template>
 
 <style scoped>
 .page {
   padding-bottom: var(--space-section);
+}
+
+.more {
+  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  font-size: var(--text-lg);
 }
 </style>

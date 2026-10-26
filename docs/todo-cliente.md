@@ -16,3 +16,12 @@
 - [ ] Domande che le fanno più spesso in DM (diventano FAQ)
 - [ ] Dominio: ne ha già uno? (es. jeanneblue.ink, il .ink sarebbe perfetto)
 - [ ] Colori/siti/artisti che le piacciono e che NON le piacciono
+
+## Testi in bozza da far rileggere/riscrivere a lei
+Scritti da noi per dare forma al sito, vanno sistemati con la sua voce:
+- [ ] Home: frase hero, presentazione breve (description di `chi-sono.md`), i 3 passi "Prenota"
+- [ ] `chi-sono.md`: bio, "Come lavoro", "I dipinti"
+- [ ] `cura.md`: indicazioni generali di guarigione → sostituire con le SUE (tempi, crema, ritocco)
+- [ ] FAQ: risposte in bozza + dati mancanti (acconto, prezzo minimo, età, attesa, cover-up)
+- [ ] `/tatuaggi` e `/dipinti`: frasi introduttive
+- [ ] Dipinti: fa commissioni? spedisce?

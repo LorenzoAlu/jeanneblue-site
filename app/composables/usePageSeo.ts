@@ -1,3 +1,5 @@
+import { joinURL } from 'ufo'
+
 interface PageSeo {
   title: string
   description: string
@@ -8,8 +10,9 @@ interface PageSeo {
 export function usePageSeo({ title, description, image }: PageSeo) {
   const route = useRoute()
   const { siteUrl } = useRuntimeConfig().public
-  const url = new URL(route.path, siteUrl).href
-  const ogImage = image ? new URL(image, siteUrl).href : undefined
+  // joinURL e non new URL(): siteUrl può avere un percorso (anteprima su GitHub Pages)
+  const url = joinURL(siteUrl, route.path)
+  const ogImage = image ? joinURL(siteUrl, image) : undefined
 
   useSeoMeta({
     title,

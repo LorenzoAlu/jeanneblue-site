@@ -1,6 +1,6 @@
 ---
-title: Quanto costa un tatuaggio?
+title: "Quanto costa un tatuaggio?"
 ordine: 2
 ---
 
-[[DA CHIEDERE: prezzo minimo, come calcola il preventivo]]
+Dipende da misura, dettaglio e zona, quindi il prezzo te lo dico dopo aver capito cosa vuoi. Il minimo per un tatuaggio piccolo è [[DA CHIEDERE: prezzo minimo]].

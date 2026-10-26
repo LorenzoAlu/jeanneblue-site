@@ -5,7 +5,9 @@ defineProps<{ title: string, id: string, link?: { to: string, label: string } }>
 
 <template>
   <div class="heading">
-    <h2 :id="id">{{ title }}</h2>
+    <h2 :id="id">
+      <slot>{{ title }}</slot>
+    </h2>
     <NuxtLink v-if="link" :to="link.to" class="more">{{ link.label }}</NuxtLink>
   </div>
 </template>

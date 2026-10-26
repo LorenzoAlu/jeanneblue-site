@@ -24,6 +24,8 @@ export default defineNuxtConfig({
     public: {
       // [[DA CHIEDERE: dominio]] — serve per canonical, OG e JSON-LD
       siteUrl: 'https://jeanneblue.ink',
+      // true sulle anteprime (NUXT_PUBLIC_NOINDEX=true): niente indicizzazione di bozze
+      noindex: false,
     },
   },
 

@@ -39,18 +39,26 @@ useHead({ titleTemplate: 'Jeanne Blue · %s' })
 
     <PageSection>
       <h2 class="contact-title">Prenota un tatuaggio</h2>
-      <ContactLinks />
+      <BookingSteps />
+      <div class="contact">
+        <ContactLinks />
+      </div>
     </PageSection>
   </div>
 </template>
 
 <style scoped>
 .tattoos {
-  padding-bottom: var(--space-section);
+  /* poco spazio: la parte alta di InkFlood fa già da respiro */
+  padding-bottom: clamp(0.5rem, 2vw, 2rem);
 }
 
 .contact-title {
   margin-bottom: 2rem;
   font-size: var(--text-xl);
+}
+
+.contact {
+  margin-top: clamp(3rem, 2rem + 4vw, 5rem);
 }
 </style>

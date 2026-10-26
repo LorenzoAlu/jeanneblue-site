@@ -45,8 +45,15 @@ usePageSeo({ title: page.value.title, description: page.value.description, image
 }
 
 .portrait {
-  width: 100%;
+  /* su mobile non deve spingere il testo sotto la piega */
+  width: min(100%, 16rem);
   aspect-ratio: 4 / 5;
   object-fit: cover;
+}
+
+@media (min-width: 900px) {
+  .portrait {
+    width: 100%;
+  }
 }
 </style>
