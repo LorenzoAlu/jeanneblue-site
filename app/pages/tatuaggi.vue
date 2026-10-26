@@ -7,7 +7,7 @@ const { contact } = useAppConfig()
 const stili = computed(() => [...new Set(tatuaggi.value?.map(t => t.stile))].sort())
 const stile = ref<string | null>(null)
 const visibili = computed(() =>
-  stile.value ? tatuaggi.value?.filter(t => t.stile === stile.value) ?? [] : tatuaggi.value ?? [],
+  stile.value ? tatuaggi.value?.filter(t => t.stile === stile.value).length ?? 0 : tatuaggi.value?.length ?? 0,
 )
 
 usePageSeo({
@@ -25,8 +25,8 @@ usePageSeo({
     >
       <TattooFilter v-if="stili.length > 1" v-model="stile" :options="stili" />
     </PageIntro>
-    <p class="visually-hidden" aria-live="polite">{{ visibili.length }} tatuaggi</p>
-    <TattooGrid :items="visibili" priority />
+    <p class="visually-hidden" aria-live="polite">{{ visibili }} tatuaggi</p>
+    <TattooGrid :items="tatuaggi ?? []" :filter="stile" priority />
     <p class="more">
       Gli altri lavori sono su
       <a :href="`https://www.instagram.com/${contact.instagram}/`" rel="noopener">Instagram</a>.
