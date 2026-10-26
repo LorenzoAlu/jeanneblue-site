@@ -113,7 +113,7 @@ onMounted(async () => {
     ? gsap.to(state, {
         progress: 1,
         ease: 'none',
-        scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom 30%', scrub: 0.9 },
+        scrollTrigger: { trigger: el, start: 'top bottom', end: 'clamp(bottom 30%)', scrub: 0.9 },
       })
     : undefined
 

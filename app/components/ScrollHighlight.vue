@@ -13,7 +13,7 @@ useMotion(root, ({ gsap }) => {
     color: style.getPropertyValue('--accent'),
     stagger: 0.1,
     ease: 'none',
-    scrollTrigger: { trigger: root.value, start: 'top 80%', end: 'bottom 45%', scrub: true },
+    scrollTrigger: { trigger: root.value, start: 'clamp(top 80%)', end: 'clamp(bottom 45%)', scrub: true },
   })
 })
 </script>

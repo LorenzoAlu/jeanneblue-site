@@ -17,6 +17,10 @@ export function loadMotion(): Promise<Motion | null> {
   loading ??= Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
     ([{ gsap }, { ScrollTrigger }]) => {
       gsap.registerPlugin(ScrollTrigger)
+      // Su mobile la barra degli indirizzi che compare/sparisce non deve ricalcolare tutto
+      ScrollTrigger.config({ ignoreMobileResize: true })
+      // I font arrivano dopo e cambiano le altezze: ricalcola le posizioni dei trigger
+      document.fonts?.ready.then(() => ScrollTrigger.refresh())
       return { gsap, ScrollTrigger }
     },
   )
@@ -60,10 +64,22 @@ export function isInViewport(el: Element) {
 
 // Timeline d'entrata: parte subito se l'elemento è già visibile al mount,
 // altrimenti quando arriva nello schermo scorrendo.
-export function entranceTimeline({ gsap }: Motion, trigger: Element, delay = 0.3) {
+export function entranceTimeline({ gsap, ScrollTrigger }: Motion, trigger: Element, delay = 0.3) {
   return gsap.timeline(
     isInViewport(trigger)
       ? { delay }
-      : { scrollTrigger: { trigger, start: 'top 85%', once: true } },
+      : {
+          scrollTrigger: {
+            trigger,
+            // "top 85%", ma mai oltre il fondo pagina: un elemento in fondo (la firma
+            // del footer) deve partire anche se lo scroll si ferma prima di quel punto.
+            // Non basta clamp(): con start uguale allo scroll massimo non scatta.
+            start: () => Math.min(
+              trigger.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.85,
+              ScrollTrigger.maxScroll(window) - 2,
+            ),
+            once: true,
+          },
+        },
   )
 }

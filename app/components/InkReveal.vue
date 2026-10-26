@@ -14,7 +14,7 @@ useMotion(root, ({ gsap }) => {
   const timeline = gsap.timeline(
     isInViewport(el)
       ? { delay: 0.3 }
-      : { scrollTrigger: { trigger: el, start: 'top 80%', once: true } },
+      : { scrollTrigger: { trigger: el, start: 'clamp(top 80%)', once: true } },
   )
   timeline
     .fromTo(stroke, { scaleX: 0, transformOrigin: 'left' }, { scaleX: 1, duration: 0.6, ease: 'expo.in' })

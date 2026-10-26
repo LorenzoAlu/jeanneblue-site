@@ -43,7 +43,7 @@ useMotion(list, ({ gsap }) => {
     const timeline = gsap.timeline(
       visible
         ? { delay: 0.35 + index * 0.15 }
-        : { scrollTrigger: { trigger: painting, start: 'top 80%', once: true } },
+        : { scrollTrigger: { trigger: painting, start: 'clamp(top 80%)', once: true } },
     )
     timeline
       .fromTo(curtain, { scaleY: 1 }, { scaleY: 0, duration: 1.3, ease: 'expo.inOut' })
