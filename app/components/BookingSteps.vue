@@ -14,11 +14,27 @@ const steps = [
     text: 'Ci vediamo in studio, con calma. Poi ti spiego come curarlo, e trovi tutto anche qui sul sito.',
   },
 ]
+
+const list = ref<HTMLElement>()
+
+// Un passo dopo l'altro: la linea si disegna, il numero cade dentro il suo
+// cerchio d'inchiostro, poi arrivano titolo e testo
+useMotion(list, (motion) => {
+  const timeline = entranceTimeline(motion, list.value!)
+  motion.gsap.utils.toArray<HTMLElement>('.step').forEach((step, i) => {
+    const at = i * 0.35
+    timeline
+      .fromTo(step.querySelector('.rule'), { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: 'power3.inOut' }, at)
+      .fromTo(step.querySelector('.number'), { scale: 0, rotate: -90 }, { scale: 1, rotate: 0, duration: 0.6, ease: 'back.out(2)' }, at + 0.3)
+      .fromTo(step.querySelectorAll('h3, p'), { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: 'expo.out' }, at + 0.4)
+  })
+})
 </script>
 
 <template>
-  <ol class="steps">
+  <ol ref="list" class="steps">
     <li v-for="(step, i) in steps" :key="step.title" class="step">
+      <span class="rule" aria-hidden="true" />
       <span class="number" aria-hidden="true">{{ i + 1 }}</span>
       <h3>{{ step.title }}</h3>
       <p>
@@ -32,7 +48,7 @@ const steps = [
 <style scoped>
 .steps {
   display: grid;
-  gap: 2rem;
+  gap: 2.5rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -46,21 +62,53 @@ const steps = [
 }
 
 .step {
+  position: relative;
   display: grid;
-  gap: 0.5rem;
+  gap: 0.6rem;
   align-content: start;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
+  padding-top: 1.75rem;
+}
+
+.rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform-origin: left;
 }
 
 .number {
-  color: var(--muted);
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
+  font-weight: 700;
 }
 
 h3 {
   font-size: var(--text-lg);
+}
+
+/* Nascosti da subito solo se l'animazione partirà (data-motion) */
+html[data-motion] .rule {
+  transform: scaleX(0);
+}
+
+html[data-motion] .number {
+  transform: scale(0);
+}
+
+html[data-motion] .step h3,
+html[data-motion] .step p {
+  opacity: 0;
 }
 
 p a {

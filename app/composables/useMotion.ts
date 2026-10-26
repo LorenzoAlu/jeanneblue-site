@@ -57,3 +57,13 @@ export function isInViewport(el: Element) {
   const rect = el.getBoundingClientRect()
   return rect.top < window.innerHeight && rect.bottom > 0
 }
+
+// Timeline d'entrata: parte subito se l'elemento è già visibile al mount,
+// altrimenti quando arriva nello schermo scorrendo.
+export function entranceTimeline({ gsap }: Motion, trigger: Element, delay = 0.3) {
+  return gsap.timeline(
+    isInViewport(trigger)
+      ? { delay }
+      : { scrollTrigger: { trigger, start: 'top 85%', once: true } },
+  )
+}
