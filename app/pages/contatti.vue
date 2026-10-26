@@ -1,14 +1,22 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'Contatti' })
+usePageSeo({
+  title: 'Contatti',
+  description: 'Prenota un tatuaggio o chiedi di un dipinto: WhatsApp, Instagram, studio.',
+})
 </script>
 
 <template>
-  <SiteContainer>
-    <h1>Contatti</h1>
-    <ul>
-      <li>WhatsApp: [[DA CHIEDERE: numero WhatsApp]]</li>
-      <li><a href="https://instagram.com/jeanneblue.ink">Instagram @jeanneblue.ink</a></li>
-      <li>Studio: [[DA CHIEDERE: nome e indirizzo studio]]</li>
-    </ul>
+  <SiteContainer class="page">
+    <PageIntro
+      title="Contatti"
+      lead="Per prenotare scrivimi su WhatsApp o in DM: raccontami l'idea, la zona e la misura, e se hai riferimenti mandameli."
+    />
+    <ContactLinks />
   </SiteContainer>
 </template>
+
+<style scoped>
+.page {
+  padding-bottom: var(--space-section);
+}
+</style>

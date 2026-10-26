@@ -41,6 +41,12 @@ const tattoos = {
     <circle cx="400" cy="500" r="65" ${stroke}/>
     <circle cx="400" cy="500" r="22" fill="${ink}"/>
     <path ${stroke} d="M260 450 l -30 -40 M330 415 l -15 -50 M400 405 l 0 -55 M470 415 l 15 -50 M540 450 l 30 -40"/>`,
+  farfalla: `
+    <path ${stroke} d="M400 420 C 340 330 220 320 230 420 C 240 500 330 500 400 470 Z"/>
+    <path ${stroke} d="M400 420 C 460 330 580 320 570 420 C 560 500 470 500 400 470 Z"/>
+    <path ${stroke} d="M400 480 C 350 520 290 580 320 630 C 350 660 395 600 400 530"/>
+    <path ${stroke} d="M400 480 C 450 520 510 580 480 630 C 450 660 405 600 400 530"/>
+    <path ${stroke} d="M400 400 L 400 600 M400 400 C 390 360 370 340 350 330 M400 400 C 410 360 430 340 450 330"/>`,
 }
 
 for (const [name, body] of Object.entries(tattoos)) {
@@ -71,6 +77,11 @@ const paintings = {
 for (const [name, [w, h, body]] of Object.entries(paintings)) {
   writeFileSync(`${OUT}/dipinto-${name}.svg`, svg(w, h, '#dcdcdc', body, 'segnaposto'))
 }
+
+// Ritratto per "chi sono"
+writeFileSync(`${OUT}/ritratto.svg`, svg(800, 1000, '#dcdcdc', `
+    <circle cx="400" cy="400" r="130" fill="#9a9a9a"/>
+    <path d="M150 1000 C 150 720 260 600 400 600 C 540 600 650 720 650 1000 Z" fill="#7a7a7a"/>`, 'segnaposto'))
 
 function svg(w, h, bg, body, label) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">

@@ -1,20 +1,24 @@
 <script setup lang="ts">
+// Pagina di solo testo da content/pagine/<slug>.md (cura, privacy, cookie).
 const props = defineProps<{ slug: string }>()
 
 const { data: page } = await useAsyncData(`pagina-${props.slug}`, () =>
   queryCollection('pagine').path(`/pagine/${props.slug}`).first(),
 )
+if (!page.value) throw createError({ statusCode: 404, fatal: true })
 
-if (!page.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Pagina non trovata', fatal: true })
-}
-
-useSeoMeta({ title: page.value.title, description: page.value.description })
+usePageSeo({ title: page.value.title, description: page.value.description })
 </script>
 
 <template>
-  <SiteContainer>
-    <h1>{{ page?.title }}</h1>
-    <ContentRenderer v-if="page" :value="page" />
+  <SiteContainer v-if="page" class="page">
+    <PageIntro :title="page.title" />
+    <ProseContent :value="page" />
   </SiteContainer>
 </template>
+
+<style scoped>
+.page {
+  padding-bottom: var(--space-section);
+}
+</style>

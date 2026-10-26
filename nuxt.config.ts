@@ -4,14 +4,26 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
-  css: ['~/assets/css/tokens.css'],
+  css: ['~/assets/css/tokens.css', '~/assets/css/transitions.css'],
+
+  // View transition usata solo per il passaggio foglio -> parete dei dipinti, vedi transitions.css
+  experimental: { viewTransition: true },
 
   app: {
     head: {
       htmlAttrs: { lang: 'it' },
       titleTemplate: '%s · Jeanne Blue',
-      meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }],
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      ],
       link: [{ rel: 'icon', href: '/favicon.ico' }],
+    },
+  },
+
+  runtimeConfig: {
+    public: {
+      // [[DA CHIEDERE: dominio]] — serve per canonical, OG e JSON-LD
+      siteUrl: 'https://jeanneblue.ink',
     },
   },
 
@@ -20,9 +32,13 @@ export default defineNuxtConfig({
     experimental: { sqliteConnector: 'native' },
   },
 
+  fonts: {
+    defaults: { weights: [400, 700], styles: ['normal'], subsets: ['latin'] },
+  },
+
   image: {
-    formats: ['avif', 'webp'],
-    screens: { sm: 480, md: 900, lg: 1280, xl: 1600 },
+    format: ['avif', 'webp'],
+    screens: { xs: 390, sm: 480, md: 900, lg: 1280, xl: 1600 },
   },
 
   nitro: {

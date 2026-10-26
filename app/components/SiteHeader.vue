@@ -1,38 +1,59 @@
-<script setup lang="ts">
-const links = [
-  { to: '/tatuaggi', label: 'Tatuaggi' },
-  { to: '/dipinti', label: 'Dipinti' },
-  { to: '/chi-sono', label: 'Chi sono' },
-  { to: '/cura', label: 'Cura' },
-  { to: '/faq', label: 'FAQ' },
-  { to: '/contatti', label: 'Contatti' },
-]
-</script>
-
 <template>
-  <header>
+  <header class="header">
     <a class="skip" href="#contenuto">Vai al contenuto</a>
-    <SiteContainer>
-      <NuxtLink to="/">Jeanne Blue</NuxtLink>
-      <nav aria-label="Principale">
-        <ul>
-          <li v-for="link in links" :key="link.to">
-            <NuxtLink :to="link.to">{{ link.label }}</NuxtLink>
-          </li>
-        </ul>
-      </nav>
+    <SiteContainer class="bar">
+      <NuxtLink to="/" class="logo">Jeanne Blue</NuxtLink>
+      <SiteNav class="desktop" />
+      <MobileMenu class="mobile" />
     </SiteContainer>
   </header>
 </template>
 
 <style scoped>
+.header {
+  position: relative;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 4.5rem;
+}
+
+.logo {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+
 .skip {
   position: absolute;
-  left: -9999px;
+  left: var(--gutter);
+  top: -4rem;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: var(--bg);
 }
 
 .skip:focus {
-  left: var(--gutter);
   top: 0.5rem;
+}
+
+.desktop {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .desktop {
+    display: block;
+  }
+
+  .mobile {
+    display: none;
+  }
 }
 </style>

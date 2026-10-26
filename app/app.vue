@@ -1,3 +1,7 @@
+<script setup lang="ts">
+useSiteJsonLd()
+</script>
+
 <template>
   <NuxtRouteAnnouncer />
   <NuxtLayout>

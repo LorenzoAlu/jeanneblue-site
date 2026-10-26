@@ -18,6 +18,9 @@ export default defineContentConfig({
       source: 'dipinti/*.yml',
       schema: z.object({
         image: z.string(),
+        // Dimensioni in pixel della foto: servono per riservare lo spazio (niente layout shift)
+        width: z.number(),
+        height: z.number(),
         alt: z.string(),
         titolo: z.string(),
         anno: z.number(),
@@ -36,6 +39,13 @@ export default defineContentConfig({
     pagine: defineCollection({
       type: 'page',
       source: 'pagine/*.md',
+      schema: z.object({
+        // Frase principale della home (solo home.md)
+        hero: z.string().optional(),
+        // Foto della pagina (chi-sono.md: ritratto)
+        image: z.string().optional(),
+        imageAlt: z.string().optional(),
+      }),
     }),
   },
 })

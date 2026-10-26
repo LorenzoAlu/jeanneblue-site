@@ -1,22 +1,47 @@
 /*
- * Token globali. Valori provvisori: palette e font si decidono nella fase
- * design (docs/design.md), qui c'è solo la struttura.
+ * Token globali, da docs/design.md.
+ * Due superfici: "foglio" (default) e "parete" (dipinti). I componenti usano solo
+ * le variabili semantiche (--bg, --text, ...), così funzionano su entrambe.
  */
 :root {
-  --color-bg: #ffffff;
-  --color-ink: #1a1a1a;
-  --color-muted: #6b6b6b;
-  --color-focus: #1a1a1a;
+  --foglio: #f4f5f7;
+  --inchiostro: #1f3a93;
+  --notte: #0e1a33;
+  --grafite: #5b6170;
+  --velo: #d6ddee;
+  --timbro: #c2362b;
+  --timbro-chiaro: #e8685c;
 
-  --font-body: system-ui, sans-serif;
-  --font-display: var(--font-body);
+  --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
+  --text-sm: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
   --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
   --text-lg: clamp(1.25rem, 1.1rem + 0.75vw, 1.75rem);
-  --text-xl: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+  --text-xl: clamp(2.25rem, 1.6rem + 3.2vw, 4.25rem);
 
   --container: 1200px;
   --gutter: clamp(1rem, 4vw, 2.5rem);
+  --space-section: clamp(4rem, 3rem + 5vw, 8rem);
+
+  --bg: var(--foglio);
+  --text: var(--notte);
+  --accent: var(--inchiostro);
+  --muted: var(--grafite);
+  --line: var(--velo);
+  --sold: var(--timbro);
+}
+
+.surface-wall {
+  --bg: var(--notte);
+  --text: var(--foglio);
+  --accent: var(--foglio);
+  --muted: var(--velo);
+  --line: #2a3a5c;
+  --sold: var(--timbro-chiaro);
+
+  background: var(--bg);
+  color: var(--text);
 }
 
 *,
@@ -27,15 +52,51 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  background: var(--bg);
 }
 
 body {
   margin: 0;
-  background: var(--color-bg);
-  color: var(--color-ink);
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: 1.6;
+  font-optical-sizing: auto;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-xl);
+}
+
+h2 {
+  font-size: var(--text-lg);
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
 }
 
 img {
@@ -44,9 +105,24 @@ img {
   height: auto;
 }
 
+ul[role='list'] {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 :focus-visible {
-  outline: 2px solid var(--color-focus);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 @media (prefers-reduced-motion: reduce) {

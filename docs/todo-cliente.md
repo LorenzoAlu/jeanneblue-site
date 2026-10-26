@@ -5,7 +5,8 @@
 - [ ] Numero WhatsApp per prenotazioni
 - [ ] P.IVA (obbligatoria in footer se ha partita IVA)
 - [ ] Stile/i di tatuaggio con cui si identifica, tecniche (macchinetta, handpoke...)
-- [ ] Breve bio, 5-10 righe, scritta da lei anche grezza
+- [ ] Breve bio, 5-10 righe, scritta da lei anche grezza (+ 2-3 righe corte per la home)
+- [ ] Frase per la home (ora c'è la bozza "Disegno sulla pelle e dipingo su tela.") e una frase sui dipinti
 - [ ] Export Instagram (Centro gestione account → Esporta le tue informazioni, solo post, JSON, qualità alta, intervallo "Sempre")
 - [ ] Foto ORIGINALI dei tatuaggi (non da IG, che comprime a 1080px)
 - [ ] Foto dei dipinti: luce naturale, frontali, senza riflessi + titolo, anno, tecnica, misure

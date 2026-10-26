@@ -27,3 +27,4 @@ logs
 assets-raw/instagram/
 
 settings.json
+/.playwright-mcp/
