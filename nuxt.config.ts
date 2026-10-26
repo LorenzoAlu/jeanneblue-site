@@ -16,6 +16,14 @@ export default defineNuxtConfig({
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       ],
+      script: [
+        {
+          // Prima del primo paint: segna che le animazioni partiranno, così il CSS
+          // può nascondere da subito ciò che entra animato (niente flash).
+          innerHTML: "matchMedia('(prefers-reduced-motion: reduce)').matches||(document.documentElement.dataset.motion='')",
+          tagPosition: 'head',
+        },
+      ],
     },
   },
 
@@ -38,7 +46,7 @@ export default defineNuxtConfig({
   },
 
   image: {
-    format: ['avif', 'webp'],
+    quality: 72,
     screens: { xs: 390, sm: 480, md: 900, lg: 1280, xl: 1600 },
   },
 

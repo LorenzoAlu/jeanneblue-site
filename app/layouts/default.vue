@@ -10,6 +10,7 @@ useHead({
 </script>
 
 <template>
+  <PreviewBanner />
   <SiteHeader />
   <main id="contenuto">
     <slot />

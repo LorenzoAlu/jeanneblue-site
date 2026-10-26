@@ -1,10 +1,16 @@
 <script setup lang="ts">
 defineProps<{ title: string, lead?: string }>()
+
+const root = ref<HTMLElement>()
+
+useMotion(root, ({ gsap }) => {
+  gsap.fromTo('.lead', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', delay: 0.45 })
+})
 </script>
 
 <template>
-  <div class="intro">
-    <h1>{{ title }}</h1>
+  <div ref="root" class="intro">
+    <h1><RisingText :text="title" mode="load" /></h1>
     <p v-if="lead" class="lead">{{ lead }}</p>
     <slot />
   </div>
@@ -15,6 +21,11 @@ defineProps<{ title: string, lead?: string }>()
   display: grid;
   gap: 1rem;
   padding-block: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(2rem, 1.5rem + 2vw, 3rem);
+}
+
+/* parte nascosta solo se l'animazione partirà (data-motion) */
+html[data-motion] .lead {
+  opacity: 0;
 }
 
 .lead {

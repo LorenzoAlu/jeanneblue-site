@@ -8,7 +8,7 @@ const root = ref<HTMLElement>()
 // Entrata: la foto si assesta (resta sempre visibile: è l'LCP), poi i bottoni
 useMotion(root, ({ gsap }) => {
   gsap.from('.image', { scale: 1.12, duration: 1.8, ease: 'expo.out' })
-  gsap.from('.actions > *', { y: 24, opacity: 0, duration: 0.9, stagger: 0.1, ease: 'expo.out', delay: 0.6 })
+  gsap.fromTo('.actions > *', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'expo.out', delay: 0.6 })
 })
 </script>
 
@@ -17,6 +17,7 @@ useMotion(root, ({ gsap }) => {
     <SiteContainer class="hero">
       <div class="frame">
         <NuxtImg
+          format="webp"
           :src="image.image"
           :alt="image.alt"
           width="800"
@@ -64,12 +65,19 @@ useMotion(root, ({ gsap }) => {
 .image {
   width: 100%;
   aspect-ratio: 4 / 5;
+  /* su desktop la hero sta tutta nello schermo, con i bottoni visibili */
+  max-height: calc(100svh - 9rem);
   object-fit: cover;
 }
 
 .text {
   display: grid;
   gap: 1.5rem;
+}
+
+/* nascosti da subito solo se l'animazione partirà (data-motion) */
+html[data-motion] .actions > * {
+  opacity: 0;
 }
 
 .actions {

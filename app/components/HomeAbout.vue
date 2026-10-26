@@ -8,6 +8,7 @@ defineProps<{ page: PagineCollectionItem }>()
   <PageSection>
     <div class="about">
       <NuxtImg
+        format="webp"
         v-if="page.image"
         :src="page.image"
         :alt="page.imageAlt ?? ''"

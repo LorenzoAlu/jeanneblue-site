@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
-  <rect width="800" height="1000" fill="#dcdcdc"/>
-  <rect x="0" y="0" width="800" height="1000" fill="#a8a8a8"/>
-    <ellipse cx="400" cy="330" rx="90" ry="110" fill="#5e5e5e"/>
-    <path d="M250 900 C 250 600 300 470 400 460 C 500 470 550 600 550 900 Z" fill="#4a4a4a"/>
-  <text x="400" y="960" text-anchor="middle" font-family="monospace" font-size="24" fill="#777" letter-spacing="4">SEGNAPOSTO</text>
-</svg>

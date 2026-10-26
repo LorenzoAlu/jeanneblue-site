@@ -12,6 +12,7 @@ usePageSeo({ title: page.value.title, description: page.value.description, image
     <PageIntro :title="page.title" />
     <div class="layout">
       <NuxtImg
+        format="webp"
         v-if="page.image"
         :src="page.image"
         :alt="page.imageAlt ?? ''"

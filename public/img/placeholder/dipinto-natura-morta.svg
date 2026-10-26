@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
-  <rect width="1000" height="1000" fill="#dcdcdc"/>
-  <rect x="0" y="620" width="1000" height="380" fill="#7a7a7a"/>
-    <path d="M380 620 L 400 380 L 470 340 L 540 380 L 560 620 Z" fill="#4d4d4d"/>
-    <circle cx="680" cy="570" r="60" fill="#9d9d9d"/>
-    <circle cx="270" cy="585" r="45" fill="#5a5a5a"/>
-  <text x="500" y="960" text-anchor="middle" font-family="monospace" font-size="24" fill="#777" letter-spacing="4">SEGNAPOSTO</text>
-</svg>

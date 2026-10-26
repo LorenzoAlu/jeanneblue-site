@@ -1,10 +1,23 @@
 <script setup lang="ts">
 import type { TatuaggiCollectionItem } from '@nuxt/content'
+import type { ViewerImage } from '~/utils/viewer'
 
 // priority: la prima riga è sopra la piega (pagina /tatuaggi), quindi niente lazy
 defineProps<{ items: TatuaggiCollectionItem[], priority?: boolean }>()
 
 const selected = ref<TatuaggiCollectionItem | null>(null)
+const viewer = computed<ViewerImage | null>(() => {
+  const item = selected.value
+  if (!item) return null
+  return {
+    src: item.image,
+    alt: item.alt,
+    width: 800,
+    height: 1000,
+    title: `${item.stile} · ${item.zona}`,
+    lines: [new Date(item.data).toLocaleDateString('it-IT', { month: 'long', year: 'numeric' })],
+  }
+})
 const grid = ref<HTMLElement>()
 
 useMotion(grid, ({ gsap, ScrollTrigger }) => {
@@ -98,6 +111,7 @@ useMotion(grid, ({ gsap, ScrollTrigger }) => {
         <button type="button" class="open" data-cursor="Apri" @click="selected = item">
           <span class="card">
             <NuxtImg
+              format="webp"
               :src="item.image"
               :alt="item.alt"
               width="800"
@@ -113,7 +127,7 @@ useMotion(grid, ({ gsap, ScrollTrigger }) => {
         </button>
       </li>
     </ul>
-    <TattooDialog :item="selected" @close="selected = null" />
+    <ImageDialog :image="viewer" @close="selected = null" />
   </div>
 </template>
 

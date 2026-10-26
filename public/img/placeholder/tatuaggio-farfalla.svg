@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
-  <rect width="800" height="1000" fill="#e7e3dd"/>
-  <path fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M400 420 C 340 330 220 320 230 420 C 240 500 330 500 400 470 Z"/>
-    <path fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M400 420 C 460 330 580 320 570 420 C 560 500 470 500 400 470 Z"/>
-    <path fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M400 480 C 350 520 290 580 320 630 C 350 660 395 600 400 530"/>
-    <path fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M400 480 C 450 520 510 580 480 630 C 450 660 405 600 400 530"/>
-    <path fill="none" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M400 400 L 400 600 M400 400 C 390 360 370 340 350 330 M400 400 C 410 360 430 340 450 330"/>
-  <text x="400" y="960" text-anchor="middle" font-family="monospace" font-size="24" fill="#777" letter-spacing="4">SEGNAPOSTO</text>
-</svg>

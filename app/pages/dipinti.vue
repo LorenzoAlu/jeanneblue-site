@@ -20,7 +20,7 @@ usePageSeo({
     <PageIntro title="Dipinti" lead="La parte lenta del mio lavoro. Le tele disponibili si possono prendere: scrivimi e ti mando foto, prezzo e dettagli." />
     <PaintingList :items="dipinti ?? []" priority />
     <div class="ask">
-      <h2>Ti interessa un'opera?</h2>
+      <h2><RisingText text="Ti interessa un'opera?" /></h2>
       <p>Scrivimi in DM o su WhatsApp: ti mando altre foto, il prezzo e come riceverla.</p>
       <NuxtLink to="/contatti">Contattami</NuxtLink>
     </div>

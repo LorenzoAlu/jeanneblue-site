@@ -1,8 +1,8 @@
 ---
 title: Chi sono
 description: "Sono Jeanne. Tatuo a linea sottile e, quando non ho l'ago in mano, dipingo. Sono due modi diversi di fare la stessa cosa: guardare con calma e lasciare un segno."
-image: /img/placeholder/ritratto.svg
-imageAlt: "Segnaposto: ritratto di Jeanne nello studio"
+image: /img/esempio/ritratto-studio.jpg
+imageAlt: "Foto di esempio: tatuatrice con guanti neri al lavoro sull'avambraccio di una cliente"
 ---
 
 <!-- BOZZA: testo scritto da noi per dare forma alla pagina, va riscritto con Jeanne. -->

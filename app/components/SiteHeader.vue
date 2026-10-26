@@ -32,7 +32,8 @@
 .skip {
   position: absolute;
   left: var(--gutter);
-  top: -4rem;
+  top: 0;
+  translate: 0 -200%;
   z-index: 10;
   padding: 0.5rem 1rem;
   background: var(--accent);
@@ -40,7 +41,7 @@
 }
 
 .skip:focus {
-  top: 0.5rem;
+  translate: 0 0.5rem;
 }
 
 .desktop {

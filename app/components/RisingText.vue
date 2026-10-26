@@ -14,7 +14,9 @@ useMotion(root, ({ gsap }) => {
   const from = { yPercent: 115, rotate: 8 }
 
   if (props.mode === 'load') {
-    gsap.from(chars, { ...from, duration: 1.1, stagger: 0.025, ease: 'expo.out', delay: 0.15 })
+    // Le lettere partono già nascoste dal CSS (data-motion): fromTo, non from
+    // y: 0 azzera la traslazione in px che GSAP legge dal CSS iniziale
+    gsap.fromTo(chars, { ...from, y: 0 }, { y: 0, yPercent: 0, rotate: 0, duration: 1.1, stagger: 0.025, ease: 'expo.out', delay: 0.1 })
     return
   }
 
@@ -28,7 +30,7 @@ useMotion(root, ({ gsap }) => {
 </script>
 
 <template>
-  <span ref="root" class="rising">
+  <span ref="root" :class="['rising', mode]">
     <span class="visually-hidden">{{ text }}</span>
     <template v-for="(word, w) in words" :key="w">
       <span class="word" aria-hidden="true">
@@ -56,5 +58,9 @@ useMotion(root, ({ gsap }) => {
 .char {
   display: inline-block;
   transform-origin: 0 100%;
+}
+
+html[data-motion] .load .char {
+  transform: translateY(115%) rotate(8deg);
 }
 </style>

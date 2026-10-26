@@ -34,16 +34,16 @@ defineProps<{ painting: DipintiCollectionItem }>()
 }
 
 .sold {
+  /* timbro sulla scheda */
+  justify-self: start;
+  margin-top: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  border: 2px solid currentColor;
+  border-radius: 4px;
   color: var(--sold);
-}
-
-.sold::before {
-  content: '';
-  display: inline-block;
-  width: 0.6em;
-  height: 0.6em;
-  margin-right: 0.4em;
-  border-radius: 50%;
-  background: currentColor;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  rotate: -6deg;
 }
 </style>

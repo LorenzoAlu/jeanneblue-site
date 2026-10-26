@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import type { TatuaggiCollectionItem } from '@nuxt/content'
 import { joinURL } from 'ufo'
+import type { ViewerImage } from '~/utils/viewer'
 
-const props = defineProps<{ item: TatuaggiCollectionItem | null }>()
+const props = defineProps<{ image: ViewerImage | null }>()
 const emit = defineEmits<{ close: [] }>()
 
 const dialog = ref<HTMLDialogElement>()
+const titleId = useId()
 const { baseURL } = useRuntimeConfig().app
 
 watch(
-  () => props.item,
-  async (item) => {
-    if (!item) return dialog.value?.close()
+  () => props.image,
+  async (image) => {
+    if (!image) return dialog.value?.close()
     dialog.value?.showModal()
     // L'immagine si apre come una goccia che si allarga
     const motion = await loadMotion()
@@ -29,12 +30,6 @@ watch(
   },
 )
 
-const date = computed(() =>
-  props.item
-    ? new Date(props.item.data).toLocaleDateString('it-IT', { month: 'long', year: 'numeric' })
-    : '',
-)
-
 // Click sullo sfondo (fuori dal contenuto) chiude
 function onClick(event: MouseEvent) {
   if (event.target === dialog.value) dialog.value?.close()
@@ -42,15 +37,21 @@ function onClick(event: MouseEvent) {
 </script>
 
 <template>
-  <dialog ref="dialog" class="dialog" aria-labelledby="tattoo-dialog-title" @close="emit('close')" @click="onClick">
-    <div v-if="item" class="content">
+  <dialog ref="dialog" class="dialog" :aria-labelledby="titleId" @close="emit('close')" @click="onClick">
+    <div v-if="image" class="content">
       <!-- File originale, non ipx: il dialog non esiste al prerender, quindi le varianti
            ridimensionate non verrebbero generate. Le foto in public/img vanno già esportate
            a ~1600px. -->
-      <img :src="joinURL(baseURL, item.image)" :alt="item.alt" width="800" height="1000" class="image">
+      <img
+        :src="joinURL(baseURL, image.src)"
+        :alt="image.alt"
+        :width="image.width"
+        :height="image.height"
+        class="image"
+      >
       <div class="meta">
-        <p id="tattoo-dialog-title" class="title">{{ item.stile }} · {{ item.zona }}</p>
-        <p class="date">{{ date }}</p>
+        <p :id="titleId" class="title">{{ image.title }}</p>
+        <p v-for="line in image.lines" :key="line" class="line">{{ line }}</p>
         <button type="button" class="close" @click="dialog?.close()">Chiudi</button>
       </div>
     </div>
@@ -87,6 +88,7 @@ function onClick(event: MouseEvent) {
 
 .image {
   width: 100%;
+  height: auto;
   max-height: calc(100dvh - 10rem);
   object-fit: contain;
 }
@@ -103,7 +105,7 @@ function onClick(event: MouseEvent) {
   font-weight: 700;
 }
 
-.date {
+.line {
   color: var(--muted);
 }
 
