@@ -9,7 +9,11 @@ const list = ref<HTMLElement>()
 // Entrata: le voci salgono a cascata, poi sotto ogni link passa un colpo
 // d'evidenziatore che si ritira (lo stesso che resta all'hover)
 useMotion(list, (motion) => {
-  entranceTimeline(motion, list.value!)
+  // Durante l'entrata --mark lo muove GSAP: la transizione CSS lo rallenterebbe
+  const el = list.value!
+  el.classList.add('entering')
+  entranceTimeline(motion, el)
+    .eventCallback('onComplete', () => el.classList.remove('entering'))
     .fromTo('.item', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'expo.out' })
     .fromTo('.link', { '--mark': 0 }, { '--mark': 1, duration: 0.5, stagger: 0.12, ease: 'power3.in' }, 0.4)
     .to('.link', { '--mark': 0, duration: 0.6, stagger: 0.12, ease: 'power3.out', clearProps: '--mark' }, '>')
@@ -71,6 +75,10 @@ html[data-motion] .item {
   background-position: 0 88%;
   background-size: calc(var(--mark) * 100%) 0.45em;
   transition: background-size 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.entering .link {
+  transition: none;
 }
 
 .link:hover,

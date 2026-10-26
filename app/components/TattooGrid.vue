@@ -107,7 +107,7 @@ useMotion(grid, (motion) => {
   const over = (event: PointerEvent) => {
     const card = cardOf(event)
     if (card && !card.contains(event.relatedTarget as Node)) {
-      gsap.to(card.querySelector('.image'), { scale: 1.08, duration: 0.8, ease: 'power3.out' })
+      gsap.to(card.querySelector('.image'), { scale: 1.08, duration: 0.8, ease: 'power3.out', overwrite: 'auto' })
     }
   }
   const out = (event: PointerEvent) => {
@@ -116,7 +116,7 @@ useMotion(grid, (motion) => {
     const tilt = tiltOf(card)
     tilt.x(0)
     tilt.y(0)
-    gsap.to(card.querySelector('.image'), { scale: 1, duration: 0.8, ease: 'power3.out' })
+    gsap.to(card.querySelector('.image'), { scale: 1, duration: 0.8, ease: 'power3.out', overwrite: 'auto' })
   }
 
   root.addEventListener('pointermove', move)
@@ -132,14 +132,29 @@ useMotion(grid, (motion) => {
 // Cambio filtro: le card restano e scivolano al nuovo posto; chi esce si rimpicciolisce
 // e sparisce, chi entra cresce. Il watch gira prima che Vue aggiorni il DOM, quindi
 // qui si fotografa lo stato "prima" senza await in mezzo.
+let activeFlip: { progress: (value: number) => unknown } | undefined
+
 watch(
   () => props.filter,
   async () => {
-    if (!tools || !grid.value) return
+    const list = grid.value?.querySelector<HTMLElement>('.grid')
+    if (!tools || !list) return
     const { gsap, Flip, ScrollTrigger } = tools
-    const state = Flip.getState(grid.value.querySelectorAll('.tile'))
+    // Click a raffica: chiudi l'animazione precedente prima di fotografare
+    activeFlip?.progress(1)
+    const state = Flip.getState(list.querySelectorAll('.tile'))
+    const heightBefore = list.offsetHeight
     await nextTick()
-    Flip.from(state, {
+    // Con absolute: true le card escono dal flusso e la griglia collasserebbe:
+    // l'altezza va bloccata e accompagnata, sennò il testo sotto salta su e giù
+    const heightAfter = list.offsetHeight
+    gsap.fromTo(list, { height: heightBefore }, {
+      height: heightAfter,
+      duration: 0.75,
+      ease: 'expo.inOut',
+      overwrite: true,
+    })
+    activeFlip = Flip.from(state, {
       duration: 0.75,
       ease: 'expo.inOut',
       stagger: 0.03,
@@ -150,7 +165,13 @@ watch(
         return gsap.fromTo(els, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'expo.out', delay: 0.25 })
       },
       onLeave: els => gsap.to(els, { opacity: 0, scale: 0.6, duration: 0.4, ease: 'power2.in' }),
-      onComplete: () => ScrollTrigger.refresh(),
+      // L'altezza si libera solo qui: con lo stagger il Flip dura più del tween
+      // dell'altezza, e liberarla prima fa collassare la griglia per un frame
+      onComplete: () => {
+        activeFlip = undefined
+        gsap.set(list, { clearProps: 'height' })
+        ScrollTrigger.refresh()
+      },
     })
   },
 )

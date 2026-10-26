@@ -1,5 +1,6 @@
 <script setup lang="ts">
 // Le pagine con meta.wall (i dipinti) passano tutta la pagina sulla superficie "parete".
+// theme-color: stessi valori di --notte e --foglio in tokens.css (qui serve il valore, non la variabile)
 const route = useRoute()
 const isWall = computed(() => route.meta.wall === true)
 

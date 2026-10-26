@@ -12,6 +12,8 @@ useMotion(root, ({ gsap, ScrollTrigger }) => {
   const track = root.value!.querySelector<HTMLElement>('.track')!
   // La traccia contiene due copie identiche: scorrere di metà larghezza è un giro
   const loop = gsap.to(track, { xPercent: -50, duration: 28, ease: 'none', repeat: -1 })
+  // Un tween ripetuto all'indietro si ferma al tempo 0: lo porto molto avanti
+  loop.totalTime(loop.duration() * 1000)
 
   let direction = 1
   const trigger = ScrollTrigger.create({

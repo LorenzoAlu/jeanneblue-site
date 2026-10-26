@@ -31,10 +31,13 @@ function onLeave() {
 watch(() => route.path, () => nextTick(onLeave))
 
 onMounted(() => {
-  // Le larghezze cambiano quando arriva il font
+  // Le larghezze cambiano quando arriva il font e col resize (font-size in clamp)
   document.fonts?.ready.then(onLeave)
+  window.addEventListener('resize', onLeave)
   onLeave()
 })
+
+onBeforeUnmount(() => window.removeEventListener('resize', onLeave))
 
 useMotion(list, ({ gsap }) => {
   gsap.fromTo('.item', { y: -24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.06, ease: 'expo.out', delay: 0.2 })

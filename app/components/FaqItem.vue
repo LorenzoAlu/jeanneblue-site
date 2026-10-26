@@ -25,16 +25,16 @@ async function onToggle(event: MouseEvent) {
   const { gsap } = motion
 
   if (details.value.open) {
-    details.value.classList.remove('opening')
     await gsap.to(body.value, { height: 0, opacity: 0, duration: 0.45, ease: 'power3.inOut' })
     details.value.open = false
   }
   else {
     details.value.open = true
-    details.value.classList.add('opening')
     await gsap.fromTo(body.value, { height: 0, opacity: 0 }, { height: 'auto', opacity: 1, duration: 0.6, ease: 'expo.out' })
   }
   gsap.set(body.value, { clearProps: 'height,opacity' })
+  // La pagina ha cambiato altezza: i trigger più in basso (footer) vanno ricalcolati
+  motion.ScrollTrigger.refresh()
   busy = false
 }
 </script>

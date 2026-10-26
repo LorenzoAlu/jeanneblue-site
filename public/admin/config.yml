@@ -41,7 +41,7 @@ collections:
     format: yml
     create: true
     delete: true
-    slug: '{{year}}-{{month}}-{{day}}-{{zona}}-{{stile}}'
+    slug: '{{year}}-{{month}}-{{day}}-tatuaggio-{{zona}}-{{stile}}'
     summary: '{{stile}} · {{zona}} — {{data}}'
     sortable_fields: [data, stile, zona]
     media_folder: /public/img/tatuaggi
@@ -79,7 +79,7 @@ collections:
     format: yml
     create: true
     delete: true
-    slug: '{{titolo}}'
+    slug: 'dipinto-{{titolo}}'
     identifier_field: titolo
     summary: '{{titolo}} ({{anno}}) — {{stato}}'
     sortable_fields: [anno, titolo]

@@ -57,6 +57,9 @@ useMotion(root, ({ gsap }) => {
       ctx.lineTo(b.x, b.y)
       ctx.stroke()
     }
+    // L'elemento sotto il mouse è sparito (cambio pagina, dialog) senza che il mouse
+    // si muovesse: chiudi il cerchio, sennò vibra all'infinito su un nodo staccato
+    if (active && !active.isConnected) setActive(null)
     // Macchinetta accesa: la testa vibra di mezzo pixel quando è sopra una foto
     if (active) gsap.set(head, { x: gsap.utils.random(-0.8, 0.8), y: gsap.utils.random(-0.8, 0.8) })
     if (!points.length && !active) gsap.ticker.remove(draw)
@@ -72,8 +75,11 @@ useMotion(root, ({ gsap }) => {
     points.push({ x: event.clientX, y: event.clientY, t: performance.now() })
     wake()
 
-    const target = (event.target as Element).closest?.('[data-cursor]') ?? null
     ink = inkAt(event.target as Element)
+    setActive((event.target as Element).closest?.('[data-cursor]') ?? null)
+  }
+
+  function setActive(target: Element | null) {
     if (target === active) return
     active = target
     label.value = target?.getAttribute('data-cursor') ?? ''

@@ -8,7 +8,8 @@ const root = ref<HTMLElement>()
 // Entrata: la foto si scopre con la pennellata di InkReveal, poi i bottoni.
 // Col mouse la foto segue il puntatore di qualche pixel, come vista da più vicino.
 useMotion(root, ({ gsap }) => {
-  gsap.fromTo('.actions > *', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'expo.out', delay: 0.6 })
+  // yPercent e non y: MagneticLink sposta lo stesso elemento su x/y
+  gsap.fromTo('.actions > *', { yPercent: 50, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'expo.out', delay: 0.6 })
 
   if (!canHover()) return
   const el = root.value!

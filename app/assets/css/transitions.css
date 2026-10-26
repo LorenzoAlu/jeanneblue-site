@@ -1,5 +1,5 @@
 /*
- * L'unico movimento del sito: passando a /dipinti la parete blu scende sul foglio
+ * Passaggio di pagina verso /dipinti la parete blu scende sul foglio
  * con un bordo irregolare, come inchiostro che cola; uscendo si ritira verso l'alto.
  * I tipi "to-wall"/"from-wall" li assegna la pagina dipinti (definePageMeta).
  * Con prefers-reduced-motion Nuxt non avvia proprio la view transition.

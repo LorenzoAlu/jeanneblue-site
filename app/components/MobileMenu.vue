@@ -9,6 +9,9 @@ const open = ref(false)
 const panel = ref<HTMLElement>()
 const toggle = ref<HTMLButtonElement>()
 let animating = false
+// Animazione in corso: chiudendo durante l'apertura va fermata, sennò le due
+// timeline si contendono il clipPath del pannello
+let running: { kill: () => void } | undefined
 
 // Centro del cerchio d'inchiostro: il bottone
 function origin() {
@@ -16,15 +19,21 @@ function origin() {
   return `${rect.left + rect.width / 2}px ${rect.top + rect.height / 2}px`
 }
 
+// Mentre il menu è aperto la pagina sotto non si scorre e non riceve il focus
+function lockPage(locked: boolean) {
+  document.documentElement.style.overflow = locked ? 'hidden' : ''
+  document.querySelectorAll('main, footer').forEach(el => el.toggleAttribute('inert', locked))
+}
+
 async function show() {
   open.value = true
-  document.documentElement.style.overflow = 'hidden'
+  lockPage(true)
   await nextTick()
   const motion = await loadMotion()
   if (motion && panel.value) {
     animating = true
     const { gsap } = motion
-    await gsap
+    const timeline = gsap
       .timeline()
       .fromTo(panel.value, { clipPath: `circle(0% at ${origin()})` }, {
         clipPath: `circle(150% at ${origin()})`,
@@ -45,19 +54,27 @@ async function show() {
         stagger: 0.08,
         ease: 'power3.out',
       }, 0.6)
+    running = timeline
+    await timeline
+    // Chiuso nel frattempo (es. tap su una voce durante l'apertura)
+    if (running !== timeline) return
+    running = undefined
     animating = false
   }
   panel.value?.querySelector<HTMLElement>('.link')?.focus()
 }
 
 async function hide({ restoreFocus = true } = {}) {
+  running?.kill()
+  running = undefined
   const motion = await loadMotion()
   if (motion && panel.value) {
     animating = true
     const { gsap } = motion
-    await gsap
+    const items = panel.value.querySelectorAll('.link, .brand, .extra > *')
+    const timeline = gsap
       .timeline()
-      .to(panel.value.querySelectorAll('.link, .brand, .extra > *'), {
+      .to(items, {
         yPercent: -60,
         opacity: 0,
         duration: 0.35,
@@ -65,11 +82,15 @@ async function hide({ restoreFocus = true } = {}) {
         ease: 'power2.in',
       })
       .to(panel.value, { clipPath: `circle(0% at ${origin()})`, duration: 0.7, ease: 'expo.inOut' }, 0.15)
-    gsap.set(panel.value.querySelectorAll('.link, .brand, .extra > *'), { clearProps: 'all' })
+    running = timeline
+    await timeline
+    if (running !== timeline) return
+    running = undefined
+    gsap.set(items, { clearProps: 'all' })
     animating = false
   }
   open.value = false
-  document.documentElement.style.overflow = ''
+  lockPage(false)
   if (restoreFocus) toggle.value?.focus()
 }
 
@@ -88,8 +109,27 @@ watch(() => route.path, () => {
   if (open.value) hide({ restoreFocus: false })
 })
 
+// Finestra allargata fino al desktop col menu aperto: il pannello sparisce via CSS,
+// ma la pagina resterebbe bloccata
+function onDesktop(event: MediaQueryListEvent) {
+  if (!event.matches || !open.value) return
+  running?.kill()
+  running = undefined
+  animating = false
+  open.value = false
+  lockPage(false)
+}
+
+let desktop: MediaQueryList | undefined
+
+onMounted(() => {
+  desktop = window.matchMedia('(min-width: 900px)')
+  desktop.addEventListener('change', onDesktop)
+})
+
 onBeforeUnmount(() => {
-  document.documentElement.style.overflow = ''
+  desktop?.removeEventListener('change', onDesktop)
+  lockPage(false)
 })
 </script>
 

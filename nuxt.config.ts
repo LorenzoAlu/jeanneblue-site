@@ -23,7 +23,9 @@ export default defineNuxtConfig({
         {
           // Prima del primo paint: segna che le animazioni partiranno, così il CSS
           // può nascondere da subito ciò che entra animato (niente flash).
-          innerHTML: "matchMedia('(prefers-reduced-motion: reduce)').matches||(document.documentElement.dataset.motion='')",
+          // Rete di sicurezza: se dopo 5s GSAP non è partito (JS del sito non caricato)
+          // il segno si toglie e il contenuto torna visibile. loadMotion mette __motion.
+          innerHTML: "matchMedia('(prefers-reduced-motion: reduce)').matches||(document.documentElement.dataset.motion='',setTimeout(function(){window.__motion||delete document.documentElement.dataset.motion},5000))",
           tagPosition: 'head',
         },
       ],
@@ -60,7 +62,13 @@ export default defineNuxtConfig({
       const painting = content as { image?: string, width?: number, height?: number }
       if (!painting.image || (painting.width && painting.height)) return
       const file = fileURLToPath(new URL(`./public${painting.image}`, import.meta.url))
-      const size = await imageSizeFromFile(file)
+      // Foto cancellata o rinominata dal pannello: il build non deve fallire,
+      // il dipinto usa il 4:5 di riserva (vedi PaintingList)
+      const size = await imageSizeFromFile(file).catch(() => null)
+      if (!size) {
+        console.warn(`[dipinti] foto non trovata: ${painting.image}`)
+        return
+      }
       // Foto del telefono ruotate via EXIF (5-8): larghezza e altezza scambiate
       const rotated = (size.orientation ?? 1) >= 5
       painting.width = rotated ? size.height : size.width

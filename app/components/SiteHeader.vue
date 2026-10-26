@@ -65,6 +65,11 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
   .header.hidden {
     translate: 0 -100%;
   }
+
+  /* Da tastiera il focus può rientrare nell'header nascosto: deve vedersi */
+  .header:focus-within {
+    translate: none;
+  }
 }
 
 .bar {
