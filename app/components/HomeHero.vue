@@ -2,30 +2,42 @@
 import type { TatuaggiCollectionItem } from '@nuxt/content'
 
 defineProps<{ title: string, image: TatuaggiCollectionItem }>()
+
+const root = ref<HTMLElement>()
+
+// Entrata: la foto si assesta (resta sempre visibile: è l'LCP), poi i bottoni
+useMotion(root, ({ gsap }) => {
+  gsap.from('.image', { scale: 1.12, duration: 1.8, ease: 'expo.out' })
+  gsap.from('.actions > *', { y: 24, opacity: 0, duration: 0.9, stagger: 0.1, ease: 'expo.out', delay: 0.6 })
+})
 </script>
 
 <template>
-  <SiteContainer class="hero">
-    <NuxtImg
-      :src="image.image"
-      :alt="image.alt"
-      width="800"
-      height="1000"
-      fit="cover"
-      sizes="xs:100vw md:55vw lg:660px"
-      preload
-      loading="eager"
-      fetchpriority="high"
-      class="image"
-    />
-    <div class="text">
-      <h1>{{ title }}</h1>
-      <p class="actions">
-        <NuxtLink to="/contatti" class="primary">Scrivimi</NuxtLink>
-        <NuxtLink to="/tatuaggi">Guarda i lavori</NuxtLink>
-      </p>
-    </div>
-  </SiteContainer>
+  <div ref="root">
+    <SiteContainer class="hero">
+      <div class="frame">
+        <NuxtImg
+          :src="image.image"
+          :alt="image.alt"
+          width="800"
+          height="1000"
+          fit="cover"
+          sizes="xs:100vw md:55vw lg:660px"
+          preload
+          loading="eager"
+          fetchpriority="high"
+          class="image"
+        />
+      </div>
+      <div class="text">
+        <h1><RisingText :text="title" mode="load" /></h1>
+        <p class="actions">
+          <MagneticLink to="/contatti">Scrivimi</MagneticLink>
+          <NuxtLink to="/tatuaggi" class="secondary">Guarda i lavori</NuxtLink>
+        </p>
+      </div>
+    </SiteContainer>
+  </div>
 </template>
 
 <style scoped>
@@ -44,11 +56,15 @@ defineProps<{ title: string, image: TatuaggiCollectionItem }>()
   }
 }
 
+.frame {
+  overflow: hidden;
+  background: var(--line);
+}
+
 .image {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  background: var(--line);
 }
 
 .text {
@@ -64,14 +80,12 @@ defineProps<{ title: string, image: TatuaggiCollectionItem }>()
   font-weight: 700;
 }
 
-.primary {
-  padding: 0.75rem 1.5rem;
-  background: var(--accent);
-  color: var(--bg);
-  text-decoration: none;
+.secondary {
+  text-decoration-thickness: 1px;
+  transition: text-underline-offset 0.3s;
 }
 
-.primary:hover {
-  background: var(--notte);
+.secondary:hover {
+  text-underline-offset: 0.4em;
 }
 </style>

@@ -45,14 +45,9 @@ const circles = ref<SVGCircleElement[]>([])
 let cleanup: (() => void) | undefined
 
 onMounted(async () => {
-  if (!svg.value || !path.value) return
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-  const [{ gsap }, { ScrollTrigger }] = await Promise.all([
-    import('gsap'),
-    import('gsap/ScrollTrigger'),
-  ])
-  gsap.registerPlugin(ScrollTrigger)
+  const motion = await loadMotion()
+  if (!motion || !svg.value || !path.value) return
+  const { gsap } = motion
 
   const el = svg.value
   const state = { progress: props.surge ? 0 : 1, time: 0, bump: 0, bumpX: 0 }
@@ -123,7 +118,7 @@ onMounted(async () => {
     : undefined
 
   // Solo con mouse/trackpad: la superficie si alza verso il puntatore quando è vicino
-  const canHover = props.surge && window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  const followPointer = props.surge && canHover()
   const onPointerMove = (event: PointerEvent) => {
     const rect = el.getBoundingClientRect()
     const surfaceTop = rect.top + rect.height * 0.45
@@ -136,7 +131,7 @@ onMounted(async () => {
       overwrite: 'auto',
     })
   }
-  if (canHover) window.addEventListener('pointermove', onPointerMove, { passive: true })
+  if (followPointer) window.addEventListener('pointermove', onPointerMove, { passive: true })
 
   render()
 
@@ -147,7 +142,7 @@ onMounted(async () => {
     gsap.ticker.remove(tick)
     observer.disconnect()
     resizeObserver.disconnect()
-    if (canHover) window.removeEventListener('pointermove', onPointerMove)
+    if (followPointer) window.removeEventListener('pointermove', onPointerMove)
   }
 })
 

@@ -10,9 +10,22 @@ const { baseURL } = useRuntimeConfig().app
 
 watch(
   () => props.item,
-  (item) => {
-    if (item) dialog.value?.showModal()
-    else dialog.value?.close()
+  async (item) => {
+    if (!item) return dialog.value?.close()
+    dialog.value?.showModal()
+    // L'immagine si apre come una goccia che si allarga
+    const motion = await loadMotion()
+    if (!motion || !dialog.value) return
+    const { gsap } = motion
+    gsap.fromTo(dialog.value, { clipPath: 'circle(0% at 50% 50%)' }, {
+      clipPath: 'circle(75% at 50% 50%)',
+      duration: 0.9,
+      ease: 'expo.out',
+      clearProps: 'clipPath',
+    })
+    gsap.from(dialog.value.querySelectorAll('.meta > *'), {
+      y: 16, opacity: 0, duration: 0.6, stagger: 0.06, ease: 'power3.out', delay: 0.25,
+    })
   },
 )
 

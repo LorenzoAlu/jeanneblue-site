@@ -15,4 +15,5 @@ useHead({
     <slot />
   </main>
   <SiteFooter />
+  <InkCursor />
 </template>
