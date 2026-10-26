@@ -1,3 +1,6 @@
+import { fileURLToPath } from 'node:url'
+import { imageSizeFromFile } from 'image-size/fromFile'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ['@nuxt/content', '@nuxt/image', '@nuxt/fonts'],
@@ -48,6 +51,21 @@ export default defineNuxtConfig({
   image: {
     quality: 72,
     screens: { xs: 390, sm: 480, md: 900, lg: 1280, xl: 1600 },
+  },
+
+  hooks: {
+    // I dipinti caricati dal pannello non hanno width/height: li leggo dalla foto
+    async 'content:file:afterParse'({ collection, content }) {
+      if (collection.name !== 'dipinti') return
+      const painting = content as { image?: string, width?: number, height?: number }
+      if (!painting.image || (painting.width && painting.height)) return
+      const file = fileURLToPath(new URL(`./public${painting.image}`, import.meta.url))
+      const size = await imageSizeFromFile(file)
+      // Foto del telefono ruotate via EXIF (5-8): larghezza e altezza scambiate
+      const rotated = (size.orientation ?? 1) >= 5
+      painting.width = rotated ? size.height : size.width
+      painting.height = rotated ? size.width : size.height
+    },
   },
 
   nitro: {

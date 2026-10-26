@@ -62,24 +62,24 @@ export function isInViewport(el: Element) {
   return rect.top < window.innerHeight && rect.bottom > 0
 }
 
+// Punto di partenza "quando il top dell'elemento arriva a fraction dello schermo",
+// ma raggiungibile sempre:
+// - già visibile al caricamento: è negativo, quindi il trigger scatta subito
+// - in fondo alla pagina: mai oltre lo scroll massimo (clamp() non basta: con start
+//   esattamente uguale allo scroll massimo onEnter non scatta)
+export function reachableStart(ScrollTrigger: Motion['ScrollTrigger'], fraction = 0.85) {
+  return (self: { trigger?: Element }) => Math.min(
+    self.trigger!.getBoundingClientRect().top + window.scrollY - window.innerHeight * fraction,
+    ScrollTrigger.maxScroll(window) - 2,
+  )
+}
+
 // Timeline d'entrata: parte subito se l'elemento è già visibile al mount,
 // altrimenti quando arriva nello schermo scorrendo.
 export function entranceTimeline({ gsap, ScrollTrigger }: Motion, trigger: Element, delay = 0.3) {
   return gsap.timeline(
     isInViewport(trigger)
       ? { delay }
-      : {
-          scrollTrigger: {
-            trigger,
-            // "top 85%", ma mai oltre il fondo pagina: un elemento in fondo (la firma
-            // del footer) deve partire anche se lo scroll si ferma prima di quel punto.
-            // Non basta clamp(): con start uguale allo scroll massimo non scatta.
-            start: () => Math.min(
-              trigger.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.85,
-              ScrollTrigger.maxScroll(window) - 2,
-            ),
-            once: true,
-          },
-        },
+      : { scrollTrigger: { trigger, start: reachableStart(ScrollTrigger), once: true } },
   )
 }

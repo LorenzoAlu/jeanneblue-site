@@ -70,7 +70,7 @@ useMotion(grid, (motion) => {
       }, 0.6)
   }
   ScrollTrigger.batch(gsap.utils.toArray<HTMLElement>('.card'), {
-    start: 'clamp(top 95%)',
+    start: reachableStart(ScrollTrigger, 0.95),
     once: true,
     onEnter: batch => reveal?.(batch as HTMLElement[], batch.some(isInViewport) ? 0.35 : 0),
   })

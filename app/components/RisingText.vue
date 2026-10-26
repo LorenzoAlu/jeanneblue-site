@@ -36,7 +36,7 @@ useMotion(root, (motion) => {
     ...from,
     stagger: 0.06,
     ease: 'power3.out',
-    scrollTrigger: { trigger: root.value, start: 'clamp(top 98%)', end: props.end, scrub: 0.8 },
+    scrollTrigger: { trigger: root.value, start: 'top 98%', end: props.end, scrub: 0.8 },
   })
 })
 </script>

@@ -6,6 +6,12 @@ import type { ViewerImage } from '~/utils/viewer'
 defineProps<{ items: DipintiCollectionItem[], priority?: boolean }>()
 
 const list = ref<HTMLElement>()
+
+// width/height arrivano dal file (vedi hook in nuxt.config); il 4:5 è solo una rete di sicurezza
+const sizeOf = (painting: DipintiCollectionItem) => ({
+  width: painting.width ?? 1200,
+  height: painting.height ?? 1500,
+})
 const selected = ref<DipintiCollectionItem | null>(null)
 const viewer = computed<ViewerImage | null>(() => {
   const item = selected.value
@@ -13,14 +19,13 @@ const viewer = computed<ViewerImage | null>(() => {
   return {
     src: item.image,
     alt: item.alt,
-    width: item.width,
-    height: item.height,
+    ...sizeOf(item),
     title: item.titolo,
     lines: [String(item.anno), item.tecnica, item.misure, item.stato === 'venduto' ? 'Venduto' : 'Disponibile'],
   }
 })
 
-useMotion(list, ({ gsap }) => {
+useMotion(list, ({ gsap, ScrollTrigger }) => {
   gsap.utils.toArray<HTMLElement>('.painting').forEach((painting, index) => {
     const frame = painting.querySelector('.frame')!
     const curtain = painting.querySelector('.curtain')!
@@ -43,7 +48,7 @@ useMotion(list, ({ gsap }) => {
     const timeline = gsap.timeline(
       visible
         ? { delay: 0.35 + index * 0.15 }
-        : { scrollTrigger: { trigger: painting, start: 'clamp(top 80%)', once: true } },
+        : { scrollTrigger: { trigger: painting, start: reachableStart(ScrollTrigger, 0.8), once: true } },
     )
     timeline
       .fromTo(curtain, { scaleY: 1 }, { scaleY: 0, duration: 1.3, ease: 'expo.inOut' })
@@ -89,7 +94,7 @@ function open(painting: DipintiCollectionItem) {
             type="button"
             class="frame"
             data-cursor="Guarda"
-            :style="{ '--ratio': painting.width / painting.height }"
+            :style="{ '--ratio': sizeOf(painting).width / sizeOf(painting).height }"
             :aria-label="`Guarda da vicino: ${painting.titolo}`"
             @click="open(painting)"
           >
@@ -97,8 +102,8 @@ function open(painting: DipintiCollectionItem) {
               format="webp"
               :src="painting.image"
               :alt="painting.alt"
-              :width="painting.width"
-              :height="painting.height"
+              :width="sizeOf(painting).width"
+              :height="sizeOf(painting).height"
               sizes="xs:100vw md:66vw lg:780px"
               :loading="priority && index === 0 ? 'eager' : 'lazy'"
               :fetchpriority="priority && index === 0 ? 'high' : undefined"

@@ -20,6 +20,8 @@
     "vue-router": "^5.4.0"
   },
   "devDependencies": {
+    "@types/node": "^22.20.5",
+    "image-size": "2.0.2",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.3.13"
   },

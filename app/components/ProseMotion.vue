@@ -14,7 +14,7 @@ useMotion(root, ({ gsap, ScrollTrigger }) => {
   const below = (els: Element[]) => els.filter(item => !isInViewport(item))
 
   below(gsap.utils.toArray<HTMLElement>('.prose > h2')).forEach((heading) => {
-    gsap.timeline({ scrollTrigger: { trigger: heading, start: 'clamp(top 85%)', once: true } })
+    gsap.timeline({ scrollTrigger: { trigger: heading, start: reachableStart(ScrollTrigger, 0.85), once: true } })
       .from(heading, { y: 40, opacity: 0, duration: 0.9, ease: 'expo.out' })
       .fromTo(heading, { '--underline': 0 }, { '--underline': 1, duration: 0.8, ease: 'power3.inOut' }, 0.2)
   })
@@ -23,7 +23,7 @@ useMotion(root, ({ gsap, ScrollTrigger }) => {
   if (blocks.length) {
     gsap.set(blocks, { y: 28, opacity: 0 })
     ScrollTrigger.batch(blocks, {
-      start: 'clamp(top 90%)',
+      start: reachableStart(ScrollTrigger, 0.9),
       once: true,
       onEnter: batch => gsap.to(batch, { y: 0, opacity: 1, duration: 0.8, stagger: 0.08, ease: 'expo.out' }),
     })
@@ -34,12 +34,12 @@ useMotion(root, ({ gsap, ScrollTrigger }) => {
   gsap.fromTo('.fill', { scaleY: 0 }, {
     scaleY: 1,
     ease: 'none',
-    scrollTrigger: { trigger: el, start: 'clamp(top 60%)', end: 'clamp(bottom 60%)', scrub: 0.5 },
+    scrollTrigger: { trigger: el, start: 'top 60%', end: 'clamp(bottom 60%)', scrub: 0.5 },
   })
   gsap.utils.toArray<HTMLElement>('.prose > h2').forEach((heading) => {
     ScrollTrigger.create({
       trigger: heading,
-      start: 'clamp(top 60%)',
+      start: reachableStart(ScrollTrigger, 0.6),
       onEnter: () => heading.classList.add('reached'),
       onLeaveBack: () => heading.classList.remove('reached'),
     })

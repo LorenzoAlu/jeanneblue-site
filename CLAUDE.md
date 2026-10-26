@@ -43,6 +43,9 @@ La cliente vuole un'identità sua.
 - `content/pagine/*.md`     -> chi-sono, cura, privacy
 - Immagini sorgente in `assets-raw/`, quelle pubblicate in `public/img/` (o via @nuxt/image)
 - Ogni immagine ha un alt descrittivo vero (cosa è tatuato e dove), mai "tattoo 1"
+- Jeanne modifica i contenuti da `/admin` (Sveltia CMS, config in `public/admin/config.yml`,
+  guida in `docs/pannello.md`): se cambi uno schema in `content.config.ts` o `data/sito.json`,
+  aggiorna anche i campi del pannello
 
 ## Design
 Prima di scrivere codice di UI:

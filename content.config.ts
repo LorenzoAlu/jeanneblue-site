@@ -18,9 +18,10 @@ export default defineContentConfig({
       source: 'dipinti/*.yml',
       schema: z.object({
         image: z.string(),
-        // Dimensioni in pixel della foto: servono per riservare lo spazio (niente layout shift)
-        width: z.number(),
-        height: z.number(),
+        // Dimensioni in pixel della foto, per riservare lo spazio (niente layout shift).
+        // Se mancano (dipinti caricati dal pannello) le legge nuxt.config dal file.
+        width: z.number().optional(),
+        height: z.number().optional(),
         alt: z.string(),
         titolo: z.string(),
         anno: z.number(),

@@ -1,0 +1,229 @@
+# Pannello di Jeanne (Sveltia CMS). Ogni "Salva" è un commit su main:
+# GitHub Actions ricostruisce il sito e in ~2 minuti è online.
+# Guida per Jeanne: docs/pannello.md
+
+backend:
+  name: github
+  repo: LorenzoAlu/jeanneblue-site
+  branch: main
+  commit_messages:
+    create: 'Pannello: aggiunto {{collection}} "{{slug}}"'
+    update: 'Pannello: modificato {{collection}} "{{slug}}"'
+    delete: 'Pannello: eliminato {{collection}} "{{slug}}"'
+    uploadMedia: 'Pannello: caricata foto "{{path}}"'
+    deleteMedia: 'Pannello: eliminata foto "{{path}}"'
+
+site_url: https://lorenzoalu.github.io/jeanneblue-site/
+display_url: https://lorenzoalu.github.io/jeanneblue-site/
+
+media_folder: /public/img/caricate
+public_folder: /img/caricate
+
+# Le foto dal telefono sono enormi: al caricamento diventano WebP, max 2000px
+media_libraries:
+  default:
+    config:
+      max_file_size: 25000000
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2000
+          height: 2000
+
+collections:
+  - name: tatuaggi
+    label: Tatuaggi
+    label_singular: Tatuaggio
+    description: Ogni tatuaggio è una foto con due righe di informazioni. I più recenti (per data) vanno in cima e in home.
+    folder: /content/tatuaggi
+    extension: yml
+    format: yml
+    create: true
+    delete: true
+    slug: '{{year}}-{{month}}-{{day}}-{{zona}}-{{stile}}'
+    summary: '{{stile}} · {{zona}} — {{data}}'
+    sortable_fields: [data, stile, zona]
+    media_folder: /public/img/tatuaggi
+    public_folder: /img/tatuaggi
+    fields:
+      - label: Foto
+        name: image
+        widget: image
+        hint: Meglio la foto originale dal telefono, non quella salvata da Instagram.
+      - label: Descrizione della foto
+        name: alt
+        widget: text
+        hint: 'Per chi non vede le immagini e per Google. Cosa è tatuato e dove, es: "rondine a linea fine tatuata sulla clavicola".'
+      - label: Zona
+        name: zona
+        widget: string
+        hint: 'Una parola, es: avambraccio, caviglia, schiena.'
+      - label: Stile
+        name: stile
+        widget: string
+        hint: 'Usa sempre le stesse parole, diventano i filtri della pagina tatuaggi. Es: linea fine, minimal, lettering.'
+      - label: Data
+        name: data
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+
+  - name: dipinti
+    label: Dipinti
+    label_singular: Dipinto
+    description: Le tele. Foto frontale, luce naturale, senza riflessi.
+    folder: /content/dipinti
+    extension: yml
+    format: yml
+    create: true
+    delete: true
+    slug: '{{titolo}}'
+    identifier_field: titolo
+    summary: '{{titolo}} ({{anno}}) — {{stato}}'
+    sortable_fields: [anno, titolo]
+    media_folder: /public/img/dipinti
+    public_folder: /img/dipinti
+    fields:
+      - label: Foto
+        name: image
+        widget: image
+        hint: Inquadra solo la tela, dritta. Le misure in pixel le calcola il sito da solo.
+      - label: Descrizione della foto
+        name: alt
+        widget: text
+        hint: 'Cosa si vede nel quadro, es: "natura morta con una brocca bianca e arance".'
+      - label: Titolo
+        name: titolo
+        widget: string
+      - label: Anno
+        name: anno
+        widget: number
+        value_type: int
+      - label: Tecnica
+        name: tecnica
+        widget: string
+        hint: 'Es: olio su tela, acrilico su tavola.'
+      - label: Misure
+        name: misure
+        widget: string
+        hint: 'Es: 50 × 70 cm'
+      - label: Stato
+        name: stato
+        widget: select
+        options:
+          - { label: Disponibile, value: disponibile }
+          - { label: Venduto, value: venduto }
+        default: disponibile
+
+  - name: faq
+    label: Domande frequenti
+    label_singular: Domanda
+    folder: /content/faq
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    slug: '{{title}}'
+    summary: '{{ordine}}. {{title}}'
+    sortable_fields: [ordine, title]
+    fields:
+      - label: Domanda
+        name: title
+        widget: string
+      - label: Posizione
+        name: ordine
+        widget: number
+        value_type: int
+        hint: 1 = prima domanda della pagina.
+      - label: Risposta
+        name: body
+        widget: markdown
+
+  - name: pagine
+    label: Pagine
+    description: I testi delle pagine del sito.
+    files:
+      - name: home
+        label: Home
+        file: /content/pagine/home.md
+        fields:
+          - { label: Titolo (scheda del browser), name: title, widget: string }
+          - { label: Frase grande in apertura, name: hero, widget: string }
+          - { label: Descrizione per Google, name: description, widget: text }
+          - { label: Testo, name: body, widget: markdown, required: false }
+      - name: chi-sono
+        label: Chi sono
+        file: /content/pagine/chi-sono.md
+        media_folder: /public/img/pagine
+        public_folder: /img/pagine
+        fields:
+          - { label: Titolo, name: title, widget: string }
+          - label: Presentazione breve
+            name: description
+            widget: text
+            hint: 2-3 righe in prima persona. Compare anche in home.
+          - { label: Foto, name: image, widget: image, required: false }
+          - { label: Descrizione della foto, name: imageAlt, widget: string, required: false }
+          - { label: Testo, name: body, widget: markdown }
+      - name: cura
+        label: Cura del tatuaggio
+        file: /content/pagine/cura.md
+        fields:
+          - { label: Titolo, name: title, widget: string }
+          - { label: Descrizione per Google, name: description, widget: text }
+          - label: Testo
+            name: body
+            widget: markdown
+            hint: 'Ogni titolo "##" diventa una tappa sulla linea a sinistra.'
+      - name: privacy
+        label: Privacy
+        file: /content/pagine/privacy.md
+        fields:
+          - { label: Titolo, name: title, widget: string }
+          - { label: Descrizione per Google, name: description, widget: text }
+          - { label: Testo, name: body, widget: markdown }
+      - name: cookie
+        label: Cookie
+        file: /content/pagine/cookie.md
+        fields:
+          - { label: Titolo, name: title, widget: string }
+          - { label: Descrizione per Google, name: description, widget: text }
+          - { label: Testo, name: body, widget: markdown }
+
+  - name: impostazioni
+    label: Impostazioni
+    description: Contatti e dati dello studio, usati in tutto il sito.
+    files:
+      - name: sito
+        label: Contatti e studio
+        file: /data/sito.json
+        format: json
+        fields:
+          - label: Sito
+            name: site
+            widget: object
+            fields:
+              - { label: Nome, name: name, widget: string }
+              - { label: Descrizione per Google, name: description, widget: text }
+          - label: Contatti
+            name: contact
+            widget: object
+            fields:
+              - { label: Instagram (senza @), name: instagram, widget: string }
+              - label: WhatsApp
+                name: whatsapp
+                widget: string
+                required: false
+                hint: 'Solo cifre con prefisso, es: 393331234567. Vuoto = non mostrato.'
+              - { label: Partita IVA, name: vat, widget: string }
+              - label: Studio
+                name: studio
+                widget: object
+                fields:
+                  - { label: Nome, name: name, widget: string }
+                  - { label: Via e civico, name: street, widget: string }
+                  - { label: CAP, name: postalCode, widget: string }
+                  - { label: Città, name: city, widget: string }
+                  - { label: Paese (codice), name: country, widget: string, default: IT }
