@@ -27,10 +27,13 @@ useHead({ titleTemplate: 'Jeanne Blue · %s' })
   <div>
     <HomeHero v-if="home?.hero && hero" :title="home.hero" :image="hero" />
     <HomeAbout v-if="about" :page="about" />
+    <InkMarquee :words="['Tatuaggi', 'Dipinti', 'Linea fine', 'Su misura', 'Jeanne Blue']" />
 
     <section class="tattoos" aria-labelledby="home-tatuaggi">
       <SiteContainer>
-        <SectionHeading id="home-tatuaggi" title="Tatuaggi" :link="{ to: '/tatuaggi', label: 'Tutti i tatuaggi' }" />
+        <SectionHeading id="home-tatuaggi" title="Tatuaggi" :link="{ to: '/tatuaggi', label: 'Tutti i tatuaggi' }">
+          <RisingText text="Tatuaggi" />
+        </SectionHeading>
         <TattooGrid :items="selection" />
       </SiteContainer>
     </section>
@@ -38,7 +41,9 @@ useHead({ titleTemplate: 'Jeanne Blue · %s' })
     <HomePaintings v-if="data?.dipinti.length" :items="data.dipinti" />
 
     <PageSection>
-      <h2 class="contact-title">Prenota un tatuaggio</h2>
+      <h2 class="contact-title">
+        <RisingText text="Prenota un tatuaggio" />
+      </h2>
       <BookingSteps />
       <div class="contact">
         <ContactLinks />

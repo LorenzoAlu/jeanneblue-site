@@ -5,17 +5,29 @@ defineProps<{ title: string, image: TatuaggiCollectionItem }>()
 
 const root = ref<HTMLElement>()
 
-// Entrata: la foto si assesta (resta sempre visibile: è l'LCP), poi i bottoni
+// Entrata: la foto si scopre con la pennellata di InkReveal, poi i bottoni.
+// Col mouse la foto segue il puntatore di qualche pixel, come vista da più vicino.
 useMotion(root, ({ gsap }) => {
-  gsap.from('.image', { scale: 1.12, duration: 1.8, ease: 'expo.out' })
   gsap.fromTo('.actions > *', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'expo.out', delay: 0.6 })
+
+  if (!canHover()) return
+  const el = root.value!
+  const image = el.querySelector('.image')
+  const x = gsap.quickTo(image, 'x', { duration: 1.2, ease: 'power3.out' })
+  const y = gsap.quickTo(image, 'y', { duration: 1.2, ease: 'power3.out' })
+  const move = (event: PointerEvent) => {
+    x((event.clientX / window.innerWidth - 0.5) * -24)
+    y((event.clientY / window.innerHeight - 0.5) * -24)
+  }
+  el.addEventListener('pointermove', move)
+  return () => el.removeEventListener('pointermove', move)
 })
 </script>
 
 <template>
   <div ref="root">
     <SiteContainer class="hero">
-      <div class="frame">
+      <InkReveal class="frame">
         <NuxtImg
           format="webp"
           :src="image.image"
@@ -29,7 +41,7 @@ useMotion(root, ({ gsap }) => {
           fetchpriority="high"
           class="image"
         />
-      </div>
+      </InkReveal>
       <div class="text">
         <h1><RisingText :text="title" mode="load" /></h1>
         <p class="actions">
@@ -58,7 +70,6 @@ useMotion(root, ({ gsap }) => {
 }
 
 .frame {
-  overflow: hidden;
   background: var(--line);
 }
 

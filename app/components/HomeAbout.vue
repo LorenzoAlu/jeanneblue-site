@@ -7,19 +7,20 @@ defineProps<{ page: PagineCollectionItem }>()
 <template>
   <PageSection>
     <div class="about">
-      <NuxtImg
-        format="webp"
-        v-if="page.image"
-        :src="page.image"
-        :alt="page.imageAlt ?? ''"
-        width="160"
-        height="200"
-        fit="cover"
-        loading="lazy"
-        class="portrait"
-      />
+      <InkReveal v-if="page.image" class="portrait">
+        <NuxtImg
+          format="webp"
+          :src="page.image"
+          :alt="page.imageAlt ?? ''"
+          width="160"
+          height="200"
+          fit="cover"
+          loading="lazy"
+          class="image"
+        />
+      </InkReveal>
       <div class="text">
-        <p class="bio">{{ page.description }}</p>
+        <ScrollHighlight v-if="page.description" :text="page.description" size="lg" />
         <NuxtLink to="/chi-sono">Di più su di me</NuxtLink>
       </div>
     </div>
@@ -42,7 +43,7 @@ defineProps<{ page: PagineCollectionItem }>()
   }
 }
 
-.portrait {
+.image {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
@@ -52,10 +53,5 @@ defineProps<{ page: PagineCollectionItem }>()
   display: grid;
   gap: 1rem;
   justify-items: start;
-}
-
-.bio {
-  font-size: var(--text-lg);
-  line-height: 1.35;
 }
 </style>

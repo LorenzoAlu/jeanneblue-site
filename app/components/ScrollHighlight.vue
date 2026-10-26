@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Frase grande che si "inchiostra" parola per parola mentre scorri.
 // Senza animazioni è testo pieno normale.
-const props = defineProps<{ text: string }>()
+const props = withDefaults(defineProps<{ text: string, size?: 'lg' | 'xl' }>(), { size: 'xl' })
 
 const words = computed(() => props.text.split(' '))
 const root = ref<HTMLElement>()
@@ -19,7 +19,7 @@ useMotion(root, ({ gsap }) => {
 </script>
 
 <template>
-  <p ref="root" class="highlight">
+  <p ref="root" :class="['highlight', size]">
     <span class="visually-hidden">{{ text }}</span>
     <span aria-hidden="true">
       <template v-for="(word, i) in words" :key="i">
@@ -37,5 +37,12 @@ useMotion(root, ({ gsap }) => {
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
+}
+
+.lg {
+  max-width: none;
+  font-size: var(--text-lg);
+  line-height: 1.35;
+  letter-spacing: 0;
 }
 </style>
