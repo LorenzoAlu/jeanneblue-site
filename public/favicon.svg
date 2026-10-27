@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Goccia d'inchiostro: blu e malva, i colori delle due palette, su fondo Notte -->
+  <defs>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8ea2ff"/>
+      <stop offset="1" stop-color="#d7a9c1"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0b0d14"/>
+  <path d="M32 9 C 32 9 15 30 15 40 a 17 17 0 0 0 34 0 C 49 30 32 9 32 9 Z" fill="url(#ink)"/>
+  <ellipse cx="25" cy="40" rx="3.2" ry="5.5" fill="#f1e9e4" opacity="0.55" transform="rotate(-18 25 40)"/>
+</svg>
