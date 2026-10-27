@@ -27,7 +27,7 @@ useHead({ titleTemplate: 'Jeanne Blue · %s' })
   <div>
     <HomeHero v-if="home?.hero && hero" :title="home.hero" :image="hero" />
     <HomeAbout v-if="about" :page="about" />
-    <InkMarquee :words="['Tatuaggi', 'Dipinti', 'Linea fine', 'Su misura', 'Jeanne Blue']" />
+    <InkMarquee :words="['Tatuaggi', 'Dipinti', 'Illustrativo', 'Floreale', 'Jeanne Blue']" />
 
     <section class="tattoos" aria-labelledby="home-tatuaggi">
       <SiteContainer>

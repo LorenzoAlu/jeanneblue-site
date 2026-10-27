@@ -5,7 +5,7 @@ const { noindex } = useRuntimeConfig().public
 
 <template>
   <p v-if="noindex" class="banner">
-    Anteprima: foto e testi sono di esempio, non lavori di Jeanne.
+    Anteprima: i dipinti e i testi sono ancora di esempio.
   </p>
 </template>
 

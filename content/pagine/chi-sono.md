@@ -1,14 +1,15 @@
 ---
 title: Chi sono
-description: "Sono Jeanne. Tatuo a linea sottile e, quando non ho l'ago in mano, dipingo. Sono due modi diversi di fare la stessa cosa: guardare con calma e lasciare un segno."
-image: /img/esempio/ritratto-studio.jpg
-imageAlt: "Foto di esempio: tatuatrice con guanti neri al lavoro sull'avambraccio di una cliente"
+description: "Sono Jeanne. Tatuo figure, fiori e ornamenti in nero e, quando non ho l'ago in mano, dipingo. Sono due modi diversi di fare la stessa cosa: guardare con calma e lasciare un segno."
+image: /img/pagine/jeanne-al-lavoro.jpg
+imageAlt: "Jeanne al lavoro in studio, china su un cliente con la macchinetta in mano, accanto a una finestra sulle montagne"
 ---
 
 <!-- BOZZA: testo scritto da noi per dare forma alla pagina, va riscritto con Jeanne. -->
 
-Disegno da sempre, prima sui quaderni e poi sulla pelle. Mi piacciono le linee pulite, le cose
-piccole che si guardano da vicino, i disegni che invecchiano bene insieme a chi li porta.
+Disegno da sempre, prima sui quaderni e poi sulla pelle. Mi piacciono i volti, i fiori che
+seguono la forma del corpo e i dettagli che si guardano da vicino: disegni pensati per
+invecchiare bene insieme a chi li porta.
 
 Lavoro a [[DA CHIEDERE: città]], in [[DA CHIEDERE: nome studio]].
 

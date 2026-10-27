@@ -28,3 +28,6 @@ assets-raw/instagram/
 
 settings.json
 /.playwright-mcp/
+
+# Foto e video grezzi mandati dalla cliente (non pubblicare il repo con dentro i sorgenti)
+assets-raw/whatsapp/

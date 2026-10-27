@@ -37,7 +37,7 @@ useMotion(root, ({ gsap }) => {
           height="1000"
           fit="cover"
           sizes="xs:100vw md:55vw lg:660px"
-          preload
+          :preload="{ fetchPriority: 'high' }"
           loading="eager"
           fetchpriority="high"
           class="image"

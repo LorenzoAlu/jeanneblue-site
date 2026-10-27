@@ -1,6 +1,5 @@
 <script setup lang="ts">
 // Menu desktop (il mobile è MobileMenu).
-// - entrata: le voci scendono una alla volta al primo caricamento
 // - hover: le lettere "rotolano" e lasciano il posto a una copia che sale da sotto,
 //   e una macchia d'inchiostro chiaro scivola dietro la voce sotto il mouse;
 //   uscendo dal menu torna sulla pagina attuale
@@ -38,10 +37,6 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => window.removeEventListener('resize', onLeave))
-
-useMotion(list, ({ gsap }) => {
-  gsap.fromTo('.item', { y: -24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.06, ease: 'expo.out', delay: 0.2 })
-})
 </script>
 
 <template>
@@ -85,10 +80,6 @@ useMotion(list, ({ gsap }) => {
 
 .item {
   position: relative;
-}
-
-html[data-motion] .item {
-  opacity: 0;
 }
 
 /* Macchia d'inchiostro chiaro dietro la voce */

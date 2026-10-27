@@ -110,6 +110,12 @@ istantaneo. È l'unica animazione del sito.
 3. **Parla lei.** Prima persona, frasi corte, nessun linguaggio da marketing. Ogni pagina
    finisce con un modo diretto per scriverle.
 
+## Verifica sulle foto vere (27/10/2026)
+
+I lavori sono illustrativi e floreali in nero (volti femminili, farfalle, peonie, fiori di
+ciliegio, ornamenti a puntini), fotografati spesso su fondo scuro con tessuti color malva.
+Il nero su pelle sta bene sia sul Foglio sia sulla parete Notte: la palette regge così com'è.
+
 ## Da verificare quando arrivano le immagini
 
 - I tatuaggi sono a linea fine / blackwork (blu regge) o a colori pieni (serve palette più neutra)?

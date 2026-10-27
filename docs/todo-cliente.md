@@ -25,3 +25,12 @@ Scritti da noi per dare forma al sito, vanno sistemati con la sua voce:
 - [ ] FAQ: risposte in bozza + dati mancanti (acconto, prezzo minimo, età, attesa, cover-up)
 - [ ] `/tatuaggi` e `/dipinti`: frasi introduttive
 - [ ] Dipinti: fa commissioni? spedisce?
+
+## Dalle foto arrivate su WhatsApp (27/10/2026)
+- [ ] Le foto sono ottime ma compresse da WhatsApp (1200px): se ha gli originali dal telefono meglio
+- [ ] Date reali dei tatuaggi (ora sono indicative, servono solo all'ordine) e conferma di zone/descrizioni
+- [ ] Va bene la divisione in stili: illustrativo, floreale, ornamentale, lettering, minimal?
+- [ ] Dal post IG risulta "Riva del Garda": è la città dello studio?
+- [ ] Il disegno del macaone (screenshot del post) e altri disegni: vuole una sezione "disegni / flash"?
+- [ ] Le foto dei dipinti: in questo invio non ce n'erano
+- [ ] 3 video: si possono usare (es. in home) se le va

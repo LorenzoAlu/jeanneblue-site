@@ -33,9 +33,9 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
   <header :class="['header', { hidden, scrolled }]">
     <a class="skip" href="#contenuto">Vai al contenuto</a>
     <SiteContainer class="bar">
-      <NuxtLink to="/" class="logo" aria-label="Jeanne Blue, home">
-        <RisingText text="Jeanne Blue" mode="load" />
-      </NuxtLink>
+      <!-- Logo e voci senza entrata animata: sono il primo testo che si vede (FCP),
+           nasconderli finché non parte il JS rallenta tutta la pagina -->
+      <NuxtLink to="/" class="logo">Jeanne Blue</NuxtLink>
       <SiteNav class="desktop" />
       <MobileMenu class="mobile" />
     </SiteContainer>
@@ -88,10 +88,11 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 }
 
 .skip {
-  position: absolute;
+  /* fixed: fuori dallo schermo a prescindere da quanto è alto il banner sopra */
+  position: fixed;
   left: var(--gutter);
   top: 0;
-  translate: 0 -200%;
+  translate: 0 -110%;
   z-index: 10;
   padding: 0.5rem 1rem;
   background: var(--accent);
