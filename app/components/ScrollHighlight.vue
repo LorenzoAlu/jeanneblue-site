@@ -7,10 +7,10 @@ const words = computed(() => props.text.split(' '))
 const root = ref<HTMLElement>()
 
 useMotion(root, ({ gsap }) => {
-  // Da grafite a inchiostro, non da trasparente: anche a metà il testo resta leggibile (AA)
+  // Da fumo al colore dei titoli, non da trasparente: anche a metà il testo resta leggibile (AA)
   const style = getComputedStyle(root.value!)
   gsap.fromTo(root.value!.querySelectorAll('.word'), { color: style.getPropertyValue('--muted') }, {
-    color: style.getPropertyValue('--accent'),
+    color: style.getPropertyValue('--heading'),
     stagger: 0.1,
     ease: 'none',
     scrollTrigger: { trigger: root.value, start: 'top 80%', end: 'clamp(bottom 45%)', scrub: true },
@@ -32,7 +32,7 @@ useMotion(root, ({ gsap }) => {
 <style scoped>
 .highlight {
   max-width: 22ch;
-  color: var(--accent);
+  color: var(--heading);
   font-size: var(--text-xl);
   font-weight: 700;
   line-height: 1.1;

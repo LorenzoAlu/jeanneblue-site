@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Nastro di parole giganti che scorre all'infinito. Va nel verso dello scroll e
 // accelera quando scorri veloce, poi torna alla sua andatura. Le parole alternano
-// un blu chiaro (#7a88b5, 3,2:1 su Foglio: AA per testo grande) e inchiostro. Niente contorno: il font variabile ha sovrapposizioni
+// blu e malva. Niente contorno: il font variabile ha sovrapposizioni
 // interne che con -webkit-text-stroke si vedono.
 // Decorativo (aria-hidden): senza animazioni resta fermo.
 defineProps<{ words: string[] }>()
@@ -61,7 +61,7 @@ useMotion(root, ({ gsap, ScrollTrigger }) => {
   align-items: center;
   gap: 0.4em;
   padding-right: 0.4em;
-  color: #7a88b5;
+  color: var(--highlight);
   font-size: clamp(3.5rem, 2rem + 8vw, 9rem);
   font-weight: 700;
   line-height: 1;

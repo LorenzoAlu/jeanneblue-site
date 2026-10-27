@@ -178,7 +178,7 @@ onBeforeUnmount(() => cleanup?.())
   width: 100%;
   height: clamp(110px, 16vw, 220px);
   margin-bottom: -1px;
-  fill: var(--notte);
+  fill: var(--wall-bg);
   overflow: visible;
 }
 

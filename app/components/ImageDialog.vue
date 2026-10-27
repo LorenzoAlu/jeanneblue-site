@@ -69,7 +69,7 @@ function onClick(event: MouseEvent) {
 }
 
 .dialog::backdrop {
-  background: rgb(14 26 51 / 0.85);
+  background: rgb(11 13 20 / 0.9);
 }
 
 .content {

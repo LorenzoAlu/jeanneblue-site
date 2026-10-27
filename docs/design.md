@@ -13,17 +13,20 @@ il foglio "si bagna" e diventa una parete blu notte, come una galleria.
 
 ## Palette
 
-| Nome            | Hex       | Ruolo                                                           |
-|-----------------|-----------|-----------------------------------------------------------------|
-| Foglio          | `#F4F5F7` | sfondo principale (bianco freddo, non crema)                    |
-| Inchiostro      | `#1F3A93` | testo dei titoli, link, linee: il blu biro (AA su Foglio: 9,2:1)  |
-| Notte           | `#0E1A33` | testo corrente; sfondo della sezione dipinti                    |
-| Grafite         | `#5B6170` | didascalie, metadati (AA su Foglio: 5,7:1)                        |
-| Velo            | `#D6DDEE` | campiture leggere, hover, bordi sottili                         |
-| Timbro          | `#C2362B` | solo per lo stato "venduto", come un timbro sulla scheda (5:1 su Foglio) |
+**v1 "Inchiostro e pelle" (27/10/2026)**, sostituisce la v0 chiara (foglio bianco + blu), che
+dal feedback sembrava un sito "in costruzione". Il sito è scuro come una sala con le luci
+basse: le foto dei tatuaggi (nero su pelle, spesso su fondo scuro) brillano; i dipinti
+stanno su una parete chiara da galleria, e in home il passaggio è un'onda color parete
+che sale dal nero.
 
-Su sfondo Notte il testo è Foglio (15,9:1), i metadati Velo (12,7:1) e il Timbro si schiarisce
-in `#E8685C` (5,4:1), perché `#C2362B` su Notte non passa AA (3,2:1).
+| Nome      | Hex       | Ruolo                                                        |
+|-----------|-----------|--------------------------------------------------------------|
+| Notte     | `#0B0D14` | fondo del sito (nero con una punta di blu)                    |
+| Pelle     | `#F1E9E4` | testo e titoli sul fondo scuro (16:1)                         |
+| Blu       | `#8EA2FF` | il "Blue" di Jeanne: link, bottoni, menu, cursore (8:1)       |
+| Malva     | `#D7A9C1` | seconda nota, presa dai tessuti delle sue foto (9,5:1)        |
+| Fumo      | `#9C97A3` | didascalie e metadati (6,8:1)                                 |
+| Parete    | `#ECE4DE` | fondo della sezione dipinti; lì testo Notte, accento `#2A3FBF` (6,5:1), timbro "venduto" `#B4233A` (5,2:1) |
 
 ## Font
 

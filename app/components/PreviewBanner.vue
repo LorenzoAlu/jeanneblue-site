@@ -12,8 +12,8 @@ const { noindex } = useRuntimeConfig().public
 <style scoped>
 .banner {
   padding: 0.5rem var(--gutter);
-  background: var(--inchiostro);
-  color: var(--foglio);
+  background: var(--accent);
+  color: var(--bg);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   text-align: center;

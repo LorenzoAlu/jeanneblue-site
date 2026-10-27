@@ -1,16 +1,18 @@
 /*
- * Token globali, da docs/design.md.
- * Due superfici: "foglio" (default) e "parete" (dipinti). I componenti usano solo
- * le variabili semantiche (--bg, --text, ...), così funzionano su entrambe.
+ * Token globali, da docs/design.md (palette v1 "Inchiostro e pelle").
+ * Due superfici: la "notte" (default, scura: i tatuaggi brillano sul nero) e la
+ * "parete" (dipinti: parete chiara di galleria). I componenti usano solo le
+ * variabili semantiche (--bg, --text, ...), così funzionano su entrambe.
  */
 :root {
-  --foglio: #f4f5f7;
-  --inchiostro: #1f3a93;
-  --notte: #0e1a33;
-  --grafite: #5b6170;
-  --velo: #d6ddee;
-  --timbro: #c2362b;
-  --timbro-chiaro: #e8685c;
+  --notte: #0b0d14;
+  --pelle: #f1e9e4;
+  --parete: #ece4de;
+  --fumo: #9c97a3;
+  --blu: #8ea2ff;
+  --blu-scuro: #2a3fbf;
+  --malva: #d7a9c1;
+  --timbro: #b4233a;
 
   --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
@@ -24,24 +26,36 @@
   --gutter: clamp(1rem, 4vw, 2.5rem);
   --space-section: clamp(4rem, 3rem + 5vw, 8rem);
 
-  --bg: var(--foglio);
-  --text: var(--notte);
-  --accent: var(--inchiostro);
-  --muted: var(--grafite);
-  --line: var(--velo);
+  /* Colore della parete anche fuori dalla parete (bordo d'inchiostro in home) */
+  --wall-bg: var(--parete);
+
+  --bg: var(--notte);
+  --text: var(--pelle);
+  --heading: var(--pelle);
+  --accent: var(--blu);
+  --highlight: var(--malva);
+  --muted: var(--fumo);
+  --line: #262a38;
   --sold: var(--timbro);
 }
 
 .surface-wall {
-  --bg: var(--notte);
-  --text: var(--foglio);
-  --accent: var(--foglio);
-  --muted: var(--velo);
-  --line: #2a3a5c;
-  --sold: var(--timbro-chiaro);
+  --bg: var(--parete);
+  --text: var(--notte);
+  --heading: var(--notte);
+  --accent: var(--blu-scuro);
+  --highlight: var(--blu-scuro);
+  --muted: #5e5a63;
+  --line: #d3cbc6;
+  --sold: var(--timbro);
 
   background: var(--bg);
   color: var(--text);
+}
+
+::selection {
+  background: var(--highlight);
+  color: var(--bg);
 }
 
 *,
@@ -69,7 +83,7 @@ h1,
 h2,
 h3 {
   margin: 0;
-  color: var(--accent);
+  color: var(--heading);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.02em;

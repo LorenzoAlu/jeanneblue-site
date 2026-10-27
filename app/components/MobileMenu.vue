@@ -147,7 +147,7 @@ onBeforeUnmount(() => {
       {{ open ? 'Chiudi' : 'Menu' }}
     </button>
 
-    <div v-show="open" id="menu-mobile" ref="panel" class="panel surface-wall">
+    <div v-show="open" id="menu-mobile" ref="panel" class="panel">
       <NuxtLink to="/" class="brand" @click="route.path === '/' && hide()">Jeanne Blue</NuxtLink>
       <nav aria-label="Principale">
         <ul role="list" class="list">
@@ -185,7 +185,7 @@ onBeforeUnmount(() => {
 }
 
 .toggle.open {
-  color: var(--foglio);
+  color: var(--bg);
 }
 
 .lines {
@@ -220,6 +220,9 @@ onBeforeUnmount(() => {
   gap: 2rem;
   padding: 6.5rem var(--gutter) 2.5rem;
   overflow-y: auto;
+  /* il menu è una pozza d'inchiostro blu, testo del colore del fondo */
+  background: var(--accent);
+  color: var(--bg);
 }
 
 .list {
@@ -241,7 +244,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   min-height: 4.5rem;
-  color: var(--foglio);
+  color: var(--bg);
   font-size: var(--text-lg);
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -250,7 +253,7 @@ onBeforeUnmount(() => {
 
 .link {
   display: inline-block;
-  color: var(--foglio);
+  color: var(--bg);
   font-size: clamp(2.5rem, 11vw, 3.75rem);
   font-weight: 700;
   line-height: 1.1;
@@ -259,7 +262,7 @@ onBeforeUnmount(() => {
 }
 
 .link.router-link-active {
-  color: var(--velo);
+  color: var(--bg);
   text-decoration: underline;
   text-decoration-thickness: 3px;
   text-underline-offset: 0.12em;
@@ -272,13 +275,14 @@ onBeforeUnmount(() => {
 }
 
 .kind {
-  color: var(--velo);
+  color: var(--bg);
+  opacity: 0.75;
   font-family: var(--font-mono);
   font-size: var(--text-sm);
 }
 
 .extra a {
-  color: var(--foglio);
+  color: var(--bg);
   font-size: var(--text-lg);
 }
 </style>

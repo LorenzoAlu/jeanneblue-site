@@ -24,7 +24,7 @@ useMotion(root, ({ gsap }) => {
   const y = gsap.quickTo(el, 'y', { duration: 0.35, ease: 'power3.out' })
   const points: { x: number, y: number, t: number }[] = []
   let active: Element | null = null
-  let ink = '#1f3a93'
+  let ink = '#8ea2ff'
 
   // Canvas a tutta finestra, nitido sugli schermi retina
   const resize = () => {
@@ -183,8 +183,8 @@ useMotion(root, ({ gsap }) => {
   width: 92px;
   height: 92px;
   border-radius: 50%;
-  background: var(--inchiostro);
-  box-shadow: 0 0 0 1.5px var(--foglio);
+  background: var(--accent);
+  box-shadow: 0 0 0 1.5px var(--bg);
 }
 
 /* Tratteggio da stencil intorno al cerchio, che gira piano quando è aperto */
@@ -194,7 +194,7 @@ useMotion(root, ({ gsap }) => {
   width: calc(100% + 24px);
   height: calc(100% + 24px);
   fill: none;
-  stroke: var(--inchiostro);
+  stroke: var(--accent);
   stroke-width: 1.5;
   stroke-dasharray: 4 5;
   opacity: 0;
@@ -213,7 +213,7 @@ useMotion(root, ({ gsap }) => {
 }
 
 .label {
-  color: var(--foglio);
+  color: var(--bg);
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   letter-spacing: 0.04em;

@@ -74,7 +74,7 @@ useMotion(root, ({ gsap }) => {
   inset: 0;
   z-index: -1;
   border-radius: 50% 50% 0 0;
-  background: var(--notte);
+  background: var(--text);
   transform: translateY(101%);
   transition:
     transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
