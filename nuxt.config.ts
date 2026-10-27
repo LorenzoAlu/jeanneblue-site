@@ -21,6 +21,11 @@ export default defineNuxtConfig({
       ],
       script: [
         {
+          // Anteprima: ?palette=malva (o blu) sceglie la palette e la ricorda, prima del paint
+          innerHTML: "try{var p=new URLSearchParams(location.search).get('palette');if(p)localStorage.setItem('palette',p);p=localStorage.getItem('palette');if(p&&p!=='blu')document.documentElement.dataset.palette=p}catch(e){}",
+          tagPosition: 'head',
+        },
+        {
           // Prima del primo paint: segna che le animazioni partiranno, così il CSS
           // può nascondere da subito ciò che entra animato (niente flash).
           // Rete di sicurezza: se dopo 5s GSAP non è partito (JS del sito non caricato)

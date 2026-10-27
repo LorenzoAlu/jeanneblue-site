@@ -29,6 +29,9 @@ async function show() {
   open.value = true
   lockPage(true)
   await nextTick()
+  // Il logo nel pannello si allinea al bottone, che sta più in basso se c'è il banner sopra
+  const rect = toggle.value!.getBoundingClientRect()
+  panel.value?.style.setProperty('--bar-y', `${rect.top + rect.height / 2}px`)
   const motion = await loadMotion()
   if (motion && panel.value) {
     animating = true
@@ -239,11 +242,9 @@ onBeforeUnmount(() => {
 
 .brand {
   position: absolute;
-  top: 0;
+  top: var(--bar-y, 2.25rem);
   left: var(--gutter);
-  display: flex;
-  align-items: center;
-  min-height: 4.5rem;
+  translate: 0 -50%;
   color: var(--bg);
   font-size: var(--text-lg);
   font-weight: 700;
