@@ -1,7 +1,8 @@
 <script setup lang="ts">
 // Testo che emerge dall'inchiostro lettera per lettera.
 // - scroll (default): legato allo scroll, per i titoli di sezione
-// - load: parte subito, per il titolo in hero
+// - load: parte subito, per i titoli in cima alla pagina. Solo CSS, senza aspettare
+//   il JS: sono quasi sempre l'LCP, e legarli a GSAP ritardava la pagina di secondi
 // - enter: parte una volta quando entra nello schermo (subito se è già visibile),
 //   per ciò che sta a fondo pagina, dove lo scroll può non bastare a completarlo
 // Senza JS o con prefers-reduced-motion è testo normale.
@@ -10,8 +11,12 @@ const props = withDefaults(
   { mode: 'scroll', end: 'clamp(top 60%)' },
 )
 
-// Parole separate da spazi veri, così il titolo va a capo normalmente
-const words = computed(() => props.text.split(' ').map(word => [...word]))
+// Parole separate da spazi veri, così il titolo va a capo normalmente.
+// Ogni lettera ha il suo indice nel testo intero, per il ritardo dell'animazione CSS
+const words = computed(() => {
+  let index = 0
+  return props.text.split(' ').map(word => [...word].map(char => ({ char, index: index++ })))
+})
 const root = ref<HTMLElement>()
 
 useMotion(root, (motion) => {
@@ -19,12 +24,7 @@ useMotion(root, (motion) => {
   const chars = root.value!.querySelectorAll('.char')
   const from = { yPercent: 115, rotate: 8 }
 
-  if (props.mode === 'load') {
-    // Le lettere partono già nascoste dal CSS (data-motion): fromTo, non from
-    // y: 0 azzera la traslazione in px che GSAP legge dal CSS iniziale
-    gsap.fromTo(chars, { ...from, y: 0 }, { y: 0, yPercent: 0, rotate: 0, duration: 1.1, stagger: 0.025, ease: 'expo.out', delay: 0.1 })
-    return
-  }
+  if (props.mode === 'load') return
 
   if (props.mode === 'enter') {
     entranceTimeline(motion, root.value!, 0.1)
@@ -46,7 +46,7 @@ useMotion(root, (motion) => {
     <span class="visually-hidden">{{ text }}</span>
     <template v-for="(word, w) in words" :key="w">
       <span class="word" aria-hidden="true">
-        <span v-for="(char, i) in word" :key="i" class="clip"><span class="char">{{ char }}</span></span>
+        <span v-for="letter in word" :key="letter.index" class="clip"><span class="char" :style="{ '--i': letter.index }">{{ letter.char }}</span></span>
       </span>
       <template v-if="w < words.length - 1">{{ ' ' }}</template>
     </template>
@@ -72,7 +72,15 @@ useMotion(root, (motion) => {
   transform-origin: 0 100%;
 }
 
+/* Parte al primo paint; data-motion è già messo nell'head (niente con reduced motion) */
 html[data-motion] .load .char {
-  transform: translateY(115%) rotate(8deg);
+  animation: rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(0.1s + var(--i) * 0.025s);
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(115%) rotate(8deg);
+  }
 }
 </style>

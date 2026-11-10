@@ -1,16 +1,12 @@
 <script setup lang="ts">
 defineProps<{ title: string, lead?: string }>()
 
-const root = ref<HTMLElement>()
-
-useMotion(root, ({ gsap }) => {
-  if (!root.value!.querySelector('.lead')) return
-  gsap.fromTo('.lead', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', delay: 0.45 })
-})
+// L'entrata del sottotitolo è CSS, come il titolo (RisingText load): è spesso l'LCP
+// della pagina e non deve aspettare il JS
 </script>
 
 <template>
-  <div ref="root" class="intro">
+  <div class="intro">
     <h1><RisingText :text="title" mode="load" /></h1>
     <p v-if="lead" class="lead">{{ lead }}</p>
     <slot />
@@ -24,9 +20,16 @@ useMotion(root, ({ gsap }) => {
   padding-block: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(2rem, 1.5rem + 2vw, 3rem);
 }
 
-/* parte nascosta solo se l'animazione partirà (data-motion) */
+/* solo se le animazioni sono attive (data-motion, messo nell'head prima del paint) */
 html[data-motion] .lead {
-  opacity: 0;
+  animation: lead-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
+}
+
+@keyframes lead-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
 }
 
 .lead {
