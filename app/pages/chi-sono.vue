@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PORTRAIT_TRACE } from '~/utils/portraitTrace'
+
 // Entrata e uscita di pagina: vedi transitions.css
 definePageMeta({ viewTransition: { toTypes: ['to-chi-sono'], fromTypes: ['from-chi-sono'] } })
 
@@ -14,7 +16,14 @@ usePageSeo({ title: page.value.title, description: page.value.description, image
   <SiteContainer v-if="page" class="page">
     <PageIntro :title="page.title" />
     <div class="layout">
-      <InkReveal v-if="page.image" class="portrait">
+      <!-- Il ritratto ricalcato si disegna da solo; con un'altra foto torna la pennellata -->
+      <PortraitSketch
+        v-if="page.image === PORTRAIT_TRACE.image"
+        :src="page.image"
+        :alt="page.imageAlt ?? ''"
+        class="portrait"
+      />
+      <InkReveal v-else-if="page.image" class="portrait">
         <NuxtImg
           format="webp"
           :src="page.image"
