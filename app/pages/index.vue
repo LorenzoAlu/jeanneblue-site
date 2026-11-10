@@ -1,31 +1,38 @@
 <script setup lang="ts">
+import { HIBISCUS } from '~/utils/hibiscus'
+
 const { data } = await useAsyncData('home', async () => {
-  const [home, about, tatuaggi, dipinti] = await Promise.all([
+  const [home, about, tatuaggi, dipinti, story] = await Promise.all([
     queryCollection('pagine').path('/pagine/home').first(),
     queryCollection('pagine').path('/pagine/chi-sono').first(),
-    queryCollection('tatuaggi').order('data', 'DESC').limit(7).all(),
-    queryCollection('dipinti').order('anno', 'DESC').limit(2).all(),
+    queryCollection('tatuaggi').order('data', 'DESC').limit(8).all(),
+    queryCollection('dipinti').order('anno', 'DESC').limit(6).all(),
+    // Il tatuaggio ricalcato in HomeStory: se sparisce dal pannello, torna la hero classica
+    queryCollection('tatuaggi').where('image', '=', HIBISCUS.image).first(),
   ])
-  return { home, about, tatuaggi, dipinti }
+  return { home, about, tatuaggi, dipinti, story }
 })
 
 const home = computed(() => data.value?.home)
 const about = computed(() => data.value?.about)
-// Il tatuaggio più recente fa da hero, i successivi vanno nella selezione
-const hero = computed(() => data.value?.tatuaggi[0])
-const selection = computed(() => data.value?.tatuaggi.slice(1) ?? [])
+const story = computed(() => data.value?.story)
+const tatuaggi = computed(() => data.value?.tatuaggi.filter(item => item.id !== story.value?.id) ?? [])
+// Senza ibisco il più recente fa da hero; la selezione sono i 6 successivi
+const hero = computed(() => (story.value ? undefined : tatuaggi.value[0]))
+const selection = computed(() => tatuaggi.value.slice(story.value ? 0 : 1, story.value ? 6 : 7))
 
 usePageSeo({
   title: home.value?.title ?? 'Tatuaggi e dipinti',
   description: home.value?.description ?? '',
-  image: hero.value?.image,
+  image: story.value?.image ?? hero.value?.image,
 })
 useHead({ titleTemplate: 'Jeanne Blue · %s' })
 </script>
 
 <template>
   <div>
-    <HomeHero v-if="home?.hero && hero" :title="home.hero" :image="hero" />
+    <HomeStory v-if="home?.hero && story" :title="home.hero" :tattoo="story" />
+    <HomeHero v-else-if="home?.hero && hero" :title="home.hero" :image="hero" />
     <HomeAbout v-if="about" :page="about" />
     <InkMarquee :words="['Tatuaggi', 'Dipinti', 'Illustrativo', 'Floreale', 'Jeanne Blue']" />
 
@@ -37,6 +44,8 @@ useHead({ titleTemplate: 'Jeanne Blue · %s' })
         <TattooGrid :items="selection" />
       </SiteContainer>
     </section>
+
+    <HomeSketches />
 
     <HomePaintings v-if="data?.dipinti.length" :items="data.dipinti" />
 

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { DipintiCollectionItem } from '@nuxt/content'
 
-// La sezione dove il foglio diventa parete: l'inchiostro sale scorrendo (InkFlood).
+// La sezione dove il foglio diventa parete: l'inchiostro sale scorrendo (InkFlood),
+// poi le tele passano in fila come in un corridoio di galleria (PaintingCorridor).
 defineProps<{ items: DipintiCollectionItem[] }>()
 </script>
 
@@ -9,12 +10,13 @@ defineProps<{ items: DipintiCollectionItem[] }>()
   <section class="paintings" aria-labelledby="home-dipinti">
     <InkFlood surge />
     <div class="surface-wall wall">
-      <SiteContainer>
-        <SectionHeading id="home-dipinti" title="Dipinti" :link="{ to: '/dipinti', label: 'Tutti i dipinti' }">
-          <RisingText text="Dipinti" />
-        </SectionHeading>
-        <PaintingList :items="items" />
-      </SiteContainer>
+      <PaintingCorridor :items="items">
+        <SiteContainer>
+          <SectionHeading id="home-dipinti" title="Dipinti" :link="{ to: '/dipinti', label: 'Tutti i dipinti' }">
+            <RisingText text="Dipinti" />
+          </SectionHeading>
+        </SiteContainer>
+      </PaintingCorridor>
     </div>
     <InkFlood flip />
   </section>

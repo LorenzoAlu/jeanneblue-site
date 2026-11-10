@@ -104,6 +104,27 @@ che si allarga (SVG, niente immagini pesanti). La stessa cosa succede navigando 
 `/tatuaggi` a `/dipinti` (view transition). Con `prefers-reduced-motion` il passaggio è
 istantaneo. È l'unica animazione del sito.
 
+## v2 "Atomica" (prototipo, branch `scrolly`, 10/11/2026)
+
+Cambio di direzione richiesto: la home diventa un racconto guidato dallo scroll, con
+sezioni bloccate sullo schermo (GSAP ScrollTrigger, pin + scrub). Il resto del sito
+per ora è uguale; dopo verranno un'animazione per sezione e transizioni di pagina
+(uscita della pagina vecchia ed entrata della nuova).
+
+1. **La goccia** (`HomeStory`): frase di Jeanne e goccia d'inchiostro sospesa. Scorrendo
+   la goccia cade, si schiaccia e diventa la punta che disegna l'ibisco (ricalco a linea
+   della foto vera, `app/utils/hibiscus.ts`). Sotto il disegno la foto del tatuaggio si
+   allarga dal pistillo e le linee si posano sul tatuaggio; poi la camera si allontana.
+2. **Il tavolo** (`HomeSketches`): i disegni di Jeanne (`public/img/opere/`) salgono in
+   pila e vengono distribuiti sul tavolo come fogli lanciati; poi volano via e resta
+   "Dal mio foglio" con l'invito a scriverle.
+3. **Il corridoio** (`PaintingCorridor`): dopo l'onda della parete, le tele scorrono in
+   orizzontale come in una galleria, ognuna scoperta da un telo.
+
+Con `prefers-reduced-motion` o senza JS tutto torna in flusso normale (frase, foto,
+griglia di disegni, fila di tele scorrevole a mano). Le immagini restano le protagoniste:
+le animazioni muovono solo i lavori, non decorazioni.
+
 ## Principi
 
 1. **Il lavoro parla, l'interfaccia scrive a margine.** Foto grandi, testo piccolo e in blu,

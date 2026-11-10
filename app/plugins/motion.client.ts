@@ -10,6 +10,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     requestAnimationFrame(async () => {
       finishNavigation()
       const motion = await loadMotion()
+      // Le sezioni bloccate (pin) spostano tutto ciò che sta sotto: i trigger vanno
+      // ricalcolati nell'ordine della pagina, non in quello di creazione
+      motion?.ScrollTrigger.sort()
       motion?.ScrollTrigger.refresh()
     })
   })
