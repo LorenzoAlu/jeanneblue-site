@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// Entrata e uscita di pagina: vedi transitions.css
+definePageMeta({ viewTransition: { toTypes: ['to-tatuaggi'], fromTypes: ['from-tatuaggi'] } })
+
 const { data: tatuaggi } = await useAsyncData('tatuaggi', () =>
   queryCollection('tatuaggi').order('data', 'DESC').all(),
 )

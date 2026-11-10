@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// Entrata e uscita di pagina: vedi transitions.css
+definePageMeta({ viewTransition: { toTypes: ['to-chi-sono'], fromTypes: ['from-chi-sono'] } })
+
 const { data: page } = await useAsyncData('chi-sono', () =>
   queryCollection('pagine').path('/pagine/chi-sono').first(),
 )

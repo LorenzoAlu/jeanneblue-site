@@ -121,6 +121,18 @@ per ora è uguale; dopo verranno un'animazione per sezione e transizioni di pagi
 3. **Il corridoio** (`PaintingCorridor`): dopo l'onda della parete, le tele scorrono in
    orizzontale come in una galleria, ognuna scoperta da un telo.
 
+**Cambi pagina** (`app/assets/css/transitions.css`, View Transitions): uscita della pagina
+vecchia (0-500ms), poi entrata della nuova. Base per tutte: la pagina si stringe in una
+goccia, la nuova si allarga da una goccia. Le 5 principali hanno pezzi loro:
+
+| Pagina   | Uscita                               | Entrata                                  |
+|----------|--------------------------------------|------------------------------------------|
+| Home     | la goccia si stringe e cade          | (la storia della goccia)                 |
+| Tatuaggi | cade come un foglio di stencil       | pioggia di gocce che si uniscono         |
+| Dipinti  | la parete si ritira in alto          | la parete sale con bordo d'inchiostro    |
+| Chi sono | iride che si chiude sul ritratto     | iride che si apre dal ritratto           |
+| Contatti | l'inchiostro si asciuga (grigio) e si stringe | il foglio arriva sul tavolo e si posa |
+
 Con `prefers-reduced-motion` o senza JS tutto torna in flusso normale (frase, foto,
 griglia di disegni, fila di tele scorrevole a mano). Le immagini restano le protagoniste:
 le animazioni muovono solo i lavori, non decorazioni.

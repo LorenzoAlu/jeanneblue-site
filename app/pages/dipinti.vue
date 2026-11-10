@@ -1,7 +1,8 @@
 <script setup lang="ts">
 definePageMeta({
   wall: true,
-  viewTransition: { toTypes: ['to-wall'], fromTypes: ['from-wall'] },
+  // Entrata e uscita di pagina: vedi transitions.css
+  viewTransition: { toTypes: ['to-dipinti'], fromTypes: ['from-dipinti'] },
 })
 
 const { data: dipinti } = await useAsyncData('dipinti', () =>

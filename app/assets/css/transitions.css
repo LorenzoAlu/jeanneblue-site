@@ -1,40 +1,208 @@
 /*
- * Passaggio di pagina verso /dipinti la parete blu scende sul foglio
- * con un bordo irregolare, come inchiostro che cola; uscendo si ritira verso l'alto.
- * I tipi "to-wall"/"from-wall" li assegna la pagina dipinti (definePageMeta).
- * Con prefers-reduced-motion Nuxt non avvia proprio la view transition.
+ * Cambi pagina (View Transitions, avviate da Nuxt: experimental.viewTransition).
+ * Ogni cambio è in due tempi: la pagina vecchia esce (0-500ms), poi entra la nuova
+ * (da 300ms). In mezzo si vede l'inchiostro (fondo Notte).
+ *
+ * - Base: la pagina si stringe in una goccia e sparisce; la nuova si allarga da una goccia.
+ * - Le 5 pagine principali hanno un'uscita e/o un'entrata loro, scelte con i tipi
+ *   dichiarati in definePageMeta (viewTransition.toTypes / fromTypes):
+ *   from-home, to-/from-tatuaggi, to-/from-dipinti, to-/from-chi-sono, to-/from-contatti.
+ * - Da desktop l'header non partecipa: resta fermo mentre sotto cambia la pagina
+ *   (su mobile si muove con la pagina, vedi SiteHeader).
+ * Con prefers-reduced-motion Nuxt non avvia la view transition: cambio secco.
  */
 
-/* Tutte le altre navigazioni: cambio secco, niente dissolvenza di default */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
+:root {
+  /* Goccia con la punta in alto, il corpo centrato a 41/64 dell'altezza */
+  --drop: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 2C32 2 10 30 10 42a22 22 0 0 0 44 0C54 30 32 2 32 2Z'/%3E%3C/svg%3E");
+  --vt-out: 500ms;
+  --vt-in: 650ms;
+  --vt-gap: 300ms;
+  --vt-ease-in: cubic-bezier(0.55, 0, 0.75, 0.05);
+  --vt-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html:active-view-transition-type(to-wall)::view-transition-new(root) {
-  animation: ink-in 700ms cubic-bezier(0.65, 0, 0.35, 1) both;
+::view-transition {
+  background: var(--c-dark-bg);
 }
 
-html:active-view-transition-type(from-wall)::view-transition-old(root) {
+/* La vecchia sta sopra: deve vedersi uscire prima che arrivi la nuova */
+::view-transition-old(root) {
   z-index: 1;
-  animation: ink-out 600ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  mix-blend-mode: normal;
+  -webkit-mask: var(--drop) 50% 55% / 400vmax no-repeat;
+  mask: var(--drop) 50% 55% / 400vmax no-repeat;
+  animation: vt-drop-out var(--vt-out) var(--vt-ease-in) both;
 }
 
-@keyframes ink-in {
-  from {
-    clip-path: polygon(0% 0%, 100% 0%, 100% -10%, 88% -7%, 76% -11%, 64% -6%, 52% -9%, 40% -5%, 28% -12%, 16% -7%, 6% -10%, 0% -8%);
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  -webkit-mask: var(--drop) 50% 55% / 0 no-repeat;
+  mask: var(--drop) 50% 55% / 0 no-repeat;
+  animation: vt-drop-in var(--vt-in) var(--vt-ease-out) var(--vt-gap) both;
+}
+
+@keyframes vt-drop-out {
+  from { -webkit-mask-size: 400vmax; mask-size: 400vmax; }
+  to { -webkit-mask-size: 0vmax; mask-size: 0vmax; }
+}
+
+@keyframes vt-drop-in {
+  from { -webkit-mask-size: 0vmax; mask-size: 0vmax; }
+  to { -webkit-mask-size: 400vmax; mask-size: 400vmax; }
+}
+
+/* Header fermo: niente animazione, solo l'immagine nuova */
+::view-transition-group(site-header) {
+  z-index: 2;
+  animation: none;
+}
+
+::view-transition-old(site-header) {
+  display: none;
+}
+
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* ---------- Home: la goccia che si è stretta cade giù ---------- */
+
+html:active-view-transition-type(from-home)::view-transition-old(root) {
+  animation: vt-drop-fall calc(var(--vt-out) + 100ms) var(--vt-ease-in) both;
+}
+
+@keyframes vt-drop-fall {
+  0% { -webkit-mask-size: 400vmax; mask-size: 400vmax; -webkit-mask-position: 50% 55%; mask-position: 50% 55%; }
+  70% { -webkit-mask-size: 6vmax; mask-size: 6vmax; -webkit-mask-position: 50% 50%; mask-position: 50% 50%; }
+  100% { -webkit-mask-size: 3vmax; mask-size: 3vmax; -webkit-mask-position: 50% 140%; mask-position: 50% 140%; }
+}
+
+/* ---------- Tatuaggi ---------- */
+
+/* Uscita: la pagina cade come un foglio di stencil che scivola dal tavolo */
+html:active-view-transition-type(from-tatuaggi)::view-transition-old(root) {
+  -webkit-mask: none;
+  mask: none;
+  transform-origin: 0% 100%;
+  animation: vt-sheet-fall var(--vt-out) var(--vt-ease-in) both;
+}
+
+@keyframes vt-sheet-fall {
+  to { transform: translateY(70vh) rotate(9deg); opacity: 0.4; }
+}
+
+/* Entrata: una pioggia di gocce che si allargano e si uniscono.
+   Sette strati di maschera: sei gocce sparse e una centrale che chiude i buchi. */
+html:active-view-transition-type(to-tatuaggi)::view-transition-new(root) {
+  -webkit-mask-image: var(--drop), var(--drop), var(--drop), var(--drop), var(--drop), var(--drop), var(--drop);
+  mask-image: var(--drop), var(--drop), var(--drop), var(--drop), var(--drop), var(--drop), var(--drop);
+  -webkit-mask-position: 12% 18%, 72% 8%, 38% 58%, 88% 66%, 20% 92%, 58% 30%, 50% 55%;
+  mask-position: 12% 18%, 72% 8%, 38% 58%, 88% 66%, 20% 92%, 58% 30%, 50% 55%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: vt-drop-rain calc(var(--vt-in) + 150ms) cubic-bezier(0.33, 1, 0.68, 1) var(--vt-gap) both;
+}
+
+@keyframes vt-drop-rain {
+  0% {
+    -webkit-mask-size: 0vmax, 0vmax, 0vmax, 0vmax, 0vmax, 0vmax, 0vmax;
+    mask-size: 0vmax, 0vmax, 0vmax, 0vmax, 0vmax, 0vmax, 0vmax;
   }
-  to {
-    clip-path: polygon(0% 0%, 100% 0%, 100% 110%, 88% 113%, 76% 109%, 64% 114%, 52% 111%, 40% 115%, 28% 108%, 16% 113%, 6% 110%, 0% 112%);
+  25% {
+    -webkit-mask-size: 14vmax, 0vmax, 10vmax, 0vmax, 0vmax, 6vmax, 0vmax;
+    mask-size: 14vmax, 0vmax, 10vmax, 0vmax, 0vmax, 6vmax, 0vmax;
+  }
+  50% {
+    -webkit-mask-size: 30vmax, 18vmax, 32vmax, 14vmax, 12vmax, 22vmax, 0vmax;
+    mask-size: 30vmax, 18vmax, 32vmax, 14vmax, 12vmax, 22vmax, 0vmax;
+  }
+  100% {
+    -webkit-mask-size: 70vmax, 60vmax, 80vmax, 60vmax, 60vmax, 70vmax, 400vmax;
+    mask-size: 70vmax, 60vmax, 80vmax, 60vmax, 60vmax, 70vmax, 400vmax;
   }
 }
 
-@keyframes ink-out {
+/* ---------- Dipinti: la parete sale con un bordo d'inchiostro, uscendo si ritira in alto ---------- */
+
+html:active-view-transition-type(to-dipinti)::view-transition-new(root) {
+  -webkit-mask: none;
+  mask: none;
+  animation: vt-wall-rise 750ms cubic-bezier(0.65, 0, 0.35, 1) 200ms both;
+}
+
+html:active-view-transition-type(from-dipinti)::view-transition-old(root) {
+  -webkit-mask: none;
+  mask: none;
+  animation: vt-wall-out 550ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes vt-wall-rise {
+  from {
+    clip-path: polygon(0% 100%, 100% 100%, 100% 112%, 88% 109%, 76% 113%, 64% 108%, 52% 111%, 40% 107%, 28% 114%, 16% 109%, 6% 112%, 0% 110%);
+  }
+  to {
+    clip-path: polygon(0% 100%, 100% 100%, 100% -10%, 88% -13%, 76% -9%, 64% -14%, 52% -11%, 40% -15%, 28% -8%, 16% -13%, 6% -10%, 0% -12%);
+  }
+}
+
+@keyframes vt-wall-out {
   from {
     clip-path: polygon(0% 0%, 100% 0%, 100% 110%, 88% 113%, 76% 109%, 64% 114%, 52% 111%, 40% 115%, 28% 108%, 16% 113%, 6% 110%, 0% 112%);
   }
   to {
     clip-path: polygon(0% 0%, 100% 0%, 100% -10%, 88% -7%, 76% -11%, 64% -6%, 52% -9%, 40% -5%, 28% -12%, 16% -7%, 6% -10%, 0% -8%);
   }
+}
+
+/* ---------- Chi sono: un'iride che si apre e si chiude sul ritratto ---------- */
+
+html:active-view-transition-type(to-chi-sono)::view-transition-new(root) {
+  -webkit-mask: none;
+  mask: none;
+  animation: vt-iris-open 800ms var(--vt-ease-out) var(--vt-gap) both;
+}
+
+html:active-view-transition-type(from-chi-sono)::view-transition-old(root) {
+  -webkit-mask: none;
+  mask: none;
+  animation: vt-iris-close var(--vt-out) var(--vt-ease-in) both;
+}
+
+@keyframes vt-iris-open {
+  0% { clip-path: circle(0% at 28% 42%); }
+  35% { clip-path: circle(14% at 28% 42%); }
+  100% { clip-path: circle(150% at 28% 42%); }
+}
+
+@keyframes vt-iris-close {
+  0% { clip-path: circle(150% at 28% 42%); }
+  65% { clip-path: circle(14% at 28% 42%); }
+  100% { clip-path: circle(0% at 28% 42%); }
+}
+
+/* ---------- Contatti: il foglio arriva sul tavolo e si posa; uscendo l'inchiostro si asciuga ---------- */
+
+html:active-view-transition-type(to-contatti)::view-transition-new(root) {
+  -webkit-mask: none;
+  mask: none;
+  transform-origin: 30% 0%;
+  animation: vt-sheet-land 800ms var(--vt-ease-out) 250ms both;
+}
+
+html:active-view-transition-type(from-contatti)::view-transition-old(root) {
+  animation:
+    vt-drop-out var(--vt-out) var(--vt-ease-in) 80ms both,
+    vt-dry var(--vt-out) linear both;
+}
+
+@keyframes vt-sheet-land {
+  0% { transform: translate(-8vw, -60vh) rotate(-12deg) scale(0.9); opacity: 0; }
+  30% { opacity: 1; }
+  75% { transform: translate(0, 1.5vh) rotate(1.5deg) scale(1); }
+  100% { transform: none; opacity: 1; }
+}
+
+@keyframes vt-dry {
+  to { filter: grayscale(1) contrast(0.6) brightness(0.7); }
 }

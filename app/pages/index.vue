@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { STORY_TATTOO } from '~/utils/storyTattoo'
 
+// Uscita di pagina (la goccia che cade): vedi transitions.css. L'entrata è HomeStory.
+definePageMeta({ viewTransition: { fromTypes: ['from-home'] } })
+
 const { data } = await useAsyncData('home', async () => {
   const [home, about, tatuaggi, dipinti, story] = await Promise.all([
     queryCollection('pagine').path('/pagine/home').first(),

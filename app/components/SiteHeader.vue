@@ -53,6 +53,10 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
   .header {
     position: sticky;
     top: 0;
+    /* nei cambi pagina resta fermo sopra la transizione (transitions.css).
+       Solo da desktop: un nome di transizione rinchiude i figli fixed, e su mobile
+       il pannello del menu verrebbe tagliato all'altezza dell'header */
+    view-transition-name: site-header;
     transition:
       translate 0.6s cubic-bezier(0.65, 0, 0.35, 1),
       box-shadow 0.4s;

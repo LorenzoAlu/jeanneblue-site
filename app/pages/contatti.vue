@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// Entrata e uscita di pagina: vedi transitions.css
+definePageMeta({ viewTransition: { toTypes: ['to-contatti'], fromTypes: ['from-contatti'] } })
+
 usePageSeo({
   title: 'Contatti',
   description: 'Prenota un tatuaggio o chiedi di un dipinto: WhatsApp, Instagram, studio.',
