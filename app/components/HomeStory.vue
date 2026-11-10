@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import type { TatuaggiCollectionItem } from '@nuxt/content'
-import { HIBISCUS } from '~/utils/hibiscus'
+import { STORY_TATTOO } from '~/utils/storyTattoo'
 
 // Apertura della home, raccontata dallo scroll (sezione bloccata sullo schermo):
 // 1. la frase di Jeanne e una goccia d'inchiostro sospesa
-// 2. scorrendo la goccia cade, si schiaccia e diventa la punta che disegna l'ibisco
+// 2. scorrendo la goccia cade, si schiaccia e diventa la punta che disegna il tatuaggio
 // 3. sotto il disegno si allarga la foto del tatuaggio vero: le linee ci cadono sopra
-// 4. la camera si allontana e mostra tutta la spalla
+// 4. la camera si allontana e mostra tutto il tatuaggio
 // Senza JS o con prefers-reduced-motion: la frase e sotto la foto, niente blocco.
+// tattoo: la scheda del tatuaggio (alt, stile, zona); la foto è il primo piano del ricalco.
 defineProps<{ title: string, tattoo: TatuaggiCollectionItem }>()
 
 const root = ref<HTMLElement>()
-const { width, height, origin, paths } = HIBISCUS
-// Punto d'attacco del pistillo, in % della foto: centro dello zoom e della macchia
+const { image, width, height, origin, paths } = STORY_TATTOO
+// Dove cade la goccia, in % della foto: centro dello zoom e della macchia
 const focus = { x: (origin.x / width) * 100, y: (origin.y / height) * 100 }
 const focusAt = `${focus.x.toFixed(1)}% ${focus.y.toFixed(1)}%`
 
@@ -79,7 +80,12 @@ useMotion(root, ({ gsap }) => {
 </script>
 
 <template>
-  <section ref="root" class="story" aria-labelledby="story-title">
+  <section
+    ref="root"
+    class="story"
+    aria-labelledby="story-title"
+    :style="{ '--ratio': width / height, '--focus': focusAt }"
+  >
     <div class="stage">
       <div class="intro">
         <SiteContainer class="intro-inner">
@@ -95,7 +101,7 @@ useMotion(root, ({ gsap }) => {
         <div class="camera">
           <NuxtImg
             format="webp"
-            :src="tattoo.image"
+            :src="image"
             :alt="tattoo.alt"
             :width="width"
             :height="height"
@@ -178,8 +184,8 @@ h1 {
 
 .camera {
   position: relative;
-  width: min(100% - 2 * var(--gutter), 74svh * 1228 / 1600);
-  aspect-ratio: 1228 / 1600;
+  width: min(100% - 2 * var(--gutter), 74svh * var(--ratio));
+  aspect-ratio: var(--ratio);
   background: var(--line);
 }
 
@@ -247,12 +253,12 @@ html[data-motion] .piece {
 
 /* in una griglia centrata il 100% non c'è: la larghezza si misura sullo schermo */
 html[data-motion] .camera {
-  width: min(100vw - 2 * var(--gutter), 74svh * 1228 / 1600);
+  width: min(100vw - 2 * var(--gutter), 74svh * var(--ratio));
   background: none;
 }
 
 html[data-motion] .photo {
-  clip-path: circle(0% at 36.8% 45.6%);
+  clip-path: circle(0% at var(--focus));
 }
 
 html[data-motion] .lines {
@@ -326,12 +332,11 @@ html[data-motion] .hint {
 }
 
 @media (min-width: 900px) {
+  /* a sinistra: il tatuaggio si allarga verso destra (ali) */
   html[data-motion] .beat {
-    left: auto;
-    right: max(var(--gutter), (100vw - var(--container)) / 2 + var(--gutter));
+    left: max(var(--gutter), (100vw - var(--container)) / 2 + var(--gutter));
     bottom: 50%;
     translate: 0 50%;
-    text-align: right;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { HIBISCUS } from '~/utils/hibiscus'
+import { STORY_TATTOO } from '~/utils/storyTattoo'
 
 const { data } = await useAsyncData('home', async () => {
   const [home, about, tatuaggi, dipinti, story] = await Promise.all([
@@ -8,7 +8,7 @@ const { data } = await useAsyncData('home', async () => {
     queryCollection('tatuaggi').order('data', 'DESC').limit(8).all(),
     queryCollection('dipinti').order('anno', 'DESC').limit(6).all(),
     // Il tatuaggio ricalcato in HomeStory: se sparisce dal pannello, torna la hero classica
-    queryCollection('tatuaggi').where('image', '=', HIBISCUS.image).first(),
+    queryCollection('tatuaggi').where('image', '=', STORY_TATTOO.entry).first(),
   ])
   return { home, about, tatuaggi, dipinti, story }
 })
@@ -17,14 +17,14 @@ const home = computed(() => data.value?.home)
 const about = computed(() => data.value?.about)
 const story = computed(() => data.value?.story)
 const tatuaggi = computed(() => data.value?.tatuaggi.filter(item => item.id !== story.value?.id) ?? [])
-// Senza ibisco il più recente fa da hero; la selezione sono i 6 successivi
+// Senza il tatuaggio della storia il più recente fa da hero; la selezione sono i 6 successivi
 const hero = computed(() => (story.value ? undefined : tatuaggi.value[0]))
 const selection = computed(() => tatuaggi.value.slice(story.value ? 0 : 1, story.value ? 6 : 7))
 
 usePageSeo({
   title: home.value?.title ?? 'Tatuaggi e dipinti',
   description: home.value?.description ?? '',
-  image: story.value?.image ?? hero.value?.image,
+  image: story.value ? STORY_TATTOO.image : hero.value?.image,
 })
 useHead({ titleTemplate: 'Jeanne Blue · %s' })
 </script>
