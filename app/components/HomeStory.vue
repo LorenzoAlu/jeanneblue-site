@@ -25,9 +25,10 @@ useMotion(root, ({ gsap }) => {
 
   // Entrata dei bottoni, come la vecchia hero
   gsap.fromTo('.actions > *', { yPercent: 50, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'expo.out', delay: 0.6 })
-  // A riposo la goccia galleggia (sul corpo interno: la posizione la decide lo scroll)
+  // A riposo la goccia galleggia (sul corpo interno: la posizione la decide lo scroll).
+  // L'entrata elastica è CSS (drop-pop): se la facesse GSAP, la goccia si vedrebbe
+  // intera finché arriva il JS e poi sparirebbe per rispuntare
   gsap.to('.drop-body', { y: -14, rotate: 4, duration: 2.2, ease: 'sine.inOut', yoyo: true, repeat: -1 })
-  gsap.from('.drop-body', { scale: 0, duration: 1.4, ease: 'elastic.out(1, 0.5)', delay: 0.5 })
 
   // Camera stretta sul pistillo: con l'origine lì, lo scale lo lascia al centro dello schermo
   gsap.set(camera, {
@@ -44,6 +45,9 @@ useMotion(root, ({ gsap }) => {
       start: 'top top',
       end: '+=380%',
       pin: true,
+      // Spacer già nel template: se lo creasse GSAP sposterebbe .stage nel DOM,
+      // e lo spostamento riavvia le animazioni CSS (la goccia rispunterebbe)
+      pinSpacer: root.value!.querySelector('.pin-spacer'),
       scrub: 1,
       anticipatePin: 1,
       invalidateOnRefresh: true,
@@ -86,52 +90,56 @@ useMotion(root, ({ gsap }) => {
     aria-labelledby="story-title"
     :style="{ '--ratio': width / height, '--focus': focusAt }"
   >
-    <div class="stage">
-      <div class="intro">
-        <SiteContainer class="intro-inner">
-          <h1 id="story-title"><RisingText :text="title" mode="load" /></h1>
-          <p class="actions">
-            <MagneticLink to="/contatti">Scrivimi</MagneticLink>
-            <NuxtLink to="/tatuaggi" class="secondary">Guarda i lavori</NuxtLink>
-          </p>
-        </SiteContainer>
-      </div>
-
-      <figure class="piece">
-        <div class="camera">
-          <NuxtImg
-            format="webp"
-            :src="image"
-            :alt="tattoo.alt"
-            :width="width"
-            :height="height"
-            sizes="xs:100vw md:60vw lg:720px"
-            loading="eager"
-            class="photo"
-          />
-          <svg class="lines" :viewBox="`0 0 ${width} ${height}`" aria-hidden="true" focusable="false">
-            <path v-for="(d, i) in paths" :key="i" :d="d" pathLength="1" />
-          </svg>
+    <div class="pin-spacer">
+      <div class="stage">
+        <div class="intro">
+          <SiteContainer class="intro-inner">
+            <h1 id="story-title"><RisingText :text="title" mode="load" /></h1>
+            <p class="actions">
+              <MagneticLink to="/contatti">Scrivimi</MagneticLink>
+              <NuxtLink to="/tatuaggi" class="secondary">Guarda i lavori</NuxtLink>
+            </p>
+          </SiteContainer>
         </div>
-        <figcaption class="caption">{{ tattoo.stile }} · {{ tattoo.zona }}</figcaption>
-      </figure>
 
-      <svg class="drop" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-        <defs>
-          <linearGradient id="story-ink" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="var(--accent)" />
-            <stop offset="1" stop-color="var(--highlight)" />
-          </linearGradient>
-        </defs>
-        <g class="drop-body">
-          <path d="M32 6 C 32 6 13 30 13 41 a 19 19 0 0 0 38 0 C 51 30 32 6 32 6 Z" fill="url(#story-ink)" />
-          <ellipse cx="24" cy="41" rx="3.4" ry="6" fill="var(--text)" opacity="0.5" transform="rotate(-18 24 41)" />
-        </g>
-      </svg>
+        <figure class="piece">
+          <div class="camera">
+            <NuxtImg
+              format="webp"
+              :src="image"
+              :alt="tattoo.alt"
+              :width="width"
+              :height="height"
+              sizes="xs:100vw md:60vw lg:720px"
+              loading="eager"
+              class="photo"
+            />
+            <svg class="lines" :viewBox="`0 0 ${width} ${height}`" aria-hidden="true" focusable="false">
+              <path v-for="(d, i) in paths" :key="i" :d="d" pathLength="1" />
+            </svg>
+          </div>
+          <figcaption class="caption">{{ tattoo.stile }} · {{ tattoo.zona }}</figcaption>
+        </figure>
 
-      <p class="beat beat-draw" aria-hidden="true">Prima il disegno, fatto per te.</p>
-      <p class="beat beat-skin" aria-hidden="true">Poi la pelle.</p>
-      <p class="hint" aria-hidden="true">Scorri</p>
+        <svg class="drop" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="story-ink" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="var(--accent)" />
+              <stop offset="1" stop-color="var(--highlight)" />
+            </linearGradient>
+          </defs>
+          <g class="drop-body">
+            <g class="drop-pop">
+              <path d="M32 6 C 32 6 13 30 13 41 a 19 19 0 0 0 38 0 C 51 30 32 6 32 6 Z" fill="url(#story-ink)" />
+              <ellipse cx="24" cy="41" rx="3.4" ry="6" fill="var(--text)" opacity="0.5" transform="rotate(-18 24 41)" />
+            </g>
+          </g>
+        </svg>
+
+        <p class="beat beat-draw" aria-hidden="true">Prima il disegno, fatto per te.</p>
+        <p class="beat beat-skin" aria-hidden="true">Poi la pelle.</p>
+        <p class="hint" aria-hidden="true">Scorri</p>
+      </div>
     </div>
   </section>
 </template>
@@ -284,6 +292,36 @@ html[data-motion] .drop {
   transform-origin: 50% 90%;
   /* spostamento iniziale (fuori dal centro) messo da GSAP: prima del JS sta in alto a destra */
   translate: min(26vw, 24rem) -26svh;
+}
+
+/* Spunta con un rimbalzo al primo paint, su un gruppo suo: drop-body lo muove GSAP
+   (galleggiamento), e GSAP azzererebbe uno scale CSS sullo stesso elemento */
+html[data-motion] .drop-pop {
+  transform-box: fill-box;
+  transform-origin: 50% 70%;
+  animation: drop-in 1.4s ease-out 0.5s both;
+}
+
+@keyframes drop-in {
+  0% {
+    transform: scale(0);
+  }
+
+  40% {
+    transform: scale(1.18);
+  }
+
+  60% {
+    transform: scale(0.92);
+  }
+
+  78% {
+    transform: scale(1.05);
+  }
+
+  90% {
+    transform: scale(0.98);
+  }
 }
 
 html[data-motion] .beat {
