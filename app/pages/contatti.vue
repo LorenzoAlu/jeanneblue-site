@@ -14,7 +14,7 @@ usePageSeo({
       title="Contatti"
       lead="Per prenotare scrivimi su WhatsApp o in DM: raccontami l'idea, la zona e la misura, e se hai riferimenti mandameli."
     />
-    <ContactLinks />
+    <ContactLinks load />
     <h2 class="steps-title">Come funziona</h2>
     <BookingSteps />
     <p class="faq">Altre domande? <NuxtLink to="/faq">Leggi le risposte più frequenti</NuxtLink>.</p>

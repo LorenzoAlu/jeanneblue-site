@@ -106,6 +106,24 @@ export function reachableStart(ScrollTrigger: Motion['ScrollTrigger'], fraction 
   )
 }
 
+// Foto coperte dal telo d'entrata: finché non si avvicinano allo schermo il CSS le
+// tiene in display:none (html[data-motion] ... :not([data-near])), così non si
+// scaricano. Il lazy loading del browser non basta: su mobile scarica fino a ~1250px
+// sotto lo schermo, e quelle foto rubano banda a font e foto visibili al primo paint.
+// Segna data-near su ogni elemento quando entra nello schermo allargato di rootMargin
+// (di base uno schermo in più sotto; il corridoio dei dipinti allarga anche a destra).
+export function loadWhenNear(elements: Element[], rootMargin = '0px 0px 100% 0px') {
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue
+      ;(entry.target as HTMLElement).dataset.near = ''
+      observer.unobserve(entry.target)
+    }
+  }, { rootMargin })
+  elements.forEach(el => observer.observe(el))
+  return () => observer.disconnect()
+}
+
 // Timeline d'entrata: parte subito se l'elemento è già visibile al mount,
 // altrimenti quando arriva nello schermo scorrendo.
 export function entranceTimeline({ gsap, ScrollTrigger }: Motion, trigger: Element, delay = 0.3) {

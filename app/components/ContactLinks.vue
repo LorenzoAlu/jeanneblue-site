@@ -4,6 +4,10 @@ const { contact } = useAppConfig()
 const whatsappUrl = contact.whatsapp ? `https://wa.me/${contact.whatsapp}` : null
 const instagramDm = `https://ig.me/m/${contact.instagram}`
 
+// load: in cima alla pagina (Contatti). Le voci salgono in CSS al primo paint, senza
+// sparire: sono l'LCP e non devono aspettare il JS (come RisingText load)
+const props = defineProps<{ load?: boolean }>()
+
 const list = ref<HTMLElement>()
 
 // Entrata: le voci salgono a cascata, poi sotto ogni link passa un colpo
@@ -12,16 +16,19 @@ useMotion(list, (motion) => {
   // Durante l'entrata --mark lo muove GSAP: la transizione CSS lo rallenterebbe
   const el = list.value!
   el.classList.add('entering')
-  entranceTimeline(motion, el)
-    .eventCallback('onComplete', () => el.classList.remove('entering'))
-    .fromTo('.item', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'expo.out' })
+  const timeline = props.load ? motion.gsap.timeline({ delay: 0.3 }) : entranceTimeline(motion, el)
+  timeline.eventCallback('onComplete', () => el.classList.remove('entering'))
+  if (!props.load) {
+    timeline.fromTo('.item', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'expo.out' })
+  }
+  timeline
     .fromTo('.link', { '--mark': 0 }, { '--mark': 1, duration: 0.5, stagger: 0.12, ease: 'power3.in' }, 0.4)
     .to('.link', { '--mark': 0, duration: 0.6, stagger: 0.12, ease: 'power3.out', clearProps: '--mark' }, '>')
 })
 </script>
 
 <template>
-  <ul ref="list" role="list" class="links">
+  <ul ref="list" role="list" :class="['links', { load }]">
     <li class="item">
       <span class="kind">WhatsApp</span>
       <a v-if="whatsappUrl" :href="whatsappUrl" rel="noopener" class="link">Scrivimi su WhatsApp</a>
@@ -53,8 +60,27 @@ useMotion(list, (motion) => {
   }
 }
 
-html[data-motion] .item {
+html[data-motion] .links:not(.load) .item {
   opacity: 0;
+}
+
+/* Solo movimento, niente dissolvenza: un elemento trasparente non conta come dipinto */
+html[data-motion] .load .item {
+  animation: item-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+
+html[data-motion] .load .item:nth-child(2) {
+  animation-delay: 0.45s;
+}
+
+html[data-motion] .load .item:nth-child(3) {
+  animation-delay: 0.55s;
+}
+
+@keyframes item-in {
+  from {
+    transform: translateY(40px);
+  }
 }
 
 .kind {

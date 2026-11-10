@@ -61,6 +61,16 @@ export default defineNuxtConfig({
   },
 
   hooks: {
+    // Niente <link rel="prefetch"> per i chunk dinamici (GSAP, Flip): il telefono li
+    // scaricherebbe insieme a font e foto del primo paint, rallentando FCP e LCP.
+    // Arrivano comunque subito dopo l'avvio, quando useMotion li importa.
+    'build:manifest'(manifest) {
+      for (const chunk of Object.values(manifest)) {
+        chunk.prefetch = false
+        chunk.preload = false
+      }
+    },
+
     // I dipinti caricati dal pannello non hanno width/height: li leggo dalla foto
     async 'content:file:afterParse'({ collection, content }) {
       if (collection.name !== 'dipinti') return

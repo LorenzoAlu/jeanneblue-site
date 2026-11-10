@@ -65,7 +65,9 @@ useMotion(list, ({ gsap, ScrollTrigger }) => {
     }
   })
 
-  if (!canHover()) return
+  const stopLoading = loadWhenNear(gsap.utils.toArray('.painting'))
+
+  if (!canHover()) return stopLoading
 
   // Luce da galleria: un faretto morbido segue il mouse sulla tela
   const root = list.value!
@@ -77,7 +79,10 @@ useMotion(list, ({ gsap, ScrollTrigger }) => {
     frame.style.setProperty('--light-y', `${event.clientY - rect.top}px`)
   }
   root.addEventListener('pointermove', move)
-  return () => root.removeEventListener('pointermove', move)
+  return () => {
+    stopLoading()
+    root.removeEventListener('pointermove', move)
+  }
 })
 
 function open(painting: DipintiCollectionItem) {
@@ -98,16 +103,21 @@ function open(painting: DipintiCollectionItem) {
             :aria-label="`Guarda da vicino: ${painting.titolo}`"
             @click="open(painting)"
           >
-            <NuxtImg
-              format="webp"
+            <!-- AVIF prima di tutto: le tele sono le foto più pesanti del sito e la
+                 prima è l'LCP di /dipinti (in webp una tela fitta arriva a 160 KB).
+                 La qualità 50 in AVIF vale a occhio il 72 del webp, a metà peso -->
+            <NuxtPicture
+              format="avif,webp"
+              quality="50"
               :src="painting.image"
               :alt="painting.alt"
               :width="sizeOf(painting).width"
               :height="sizeOf(painting).height"
               sizes="xs:100vw md:66vw lg:780px"
               :loading="priority && index === 0 ? 'eager' : 'lazy'"
-              :fetchpriority="priority && index === 0 ? 'high' : undefined"
-              class="image"
+              :preload="priority && index === 0 ? { fetchPriority: 'high' } : undefined"
+              :img-attrs="{ class: 'image', fetchpriority: priority && index === 0 ? 'high' : undefined }"
+              class="picture"
             />
             <span class="curtain" aria-hidden="true" />
           </button>
@@ -156,7 +166,12 @@ function open(painting: DipintiCollectionItem) {
   box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.6);
 }
 
-.image {
+/* La <img> è dentro <picture>, fuori dallo scope del componente: :deep */
+.picture {
+  display: contents;
+}
+
+.frame :deep(.image) {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -176,6 +191,11 @@ html[data-motion] .curtain {
   transform: scaleY(1);
 }
 
+/* Tele lontane dallo schermo: si scaricano solo quando si avvicinano (loadWhenNear) */
+html[data-motion] .painting:not([data-near]) :deep(.image[loading='lazy']) {
+  display: none;
+}
+
 /* Faretto: luce calda che segue il mouse, solo all'hover */
 .frame::after {
   content: '';
@@ -193,7 +213,7 @@ html[data-motion] .curtain {
 }
 
 @media (hover: hover) {
-  .frame:hover .image {
+  .frame:hover :deep(.image) {
     scale: 1.04;
   }
 

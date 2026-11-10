@@ -78,7 +78,13 @@ useMotion(root, ({ gsap }) => {
     window.scrollTo({ top: st.start + (st.end - st.start) * progress, behavior: 'instant' })
   }
   el.addEventListener('focusin', onFocus)
-  return () => el.removeEventListener('focusin', onFocus)
+
+  // Le tele arrivano da destra mentre la fila scorre: si scaricano con uno schermo d'anticipo
+  const stopLoading = loadWhenNear(gsap.utils.toArray('.item', el), '0px 100% 100% 0px')
+  return () => {
+    stopLoading()
+    el.removeEventListener('focusin', onFocus)
+  }
 })
 </script>
 
@@ -177,5 +183,10 @@ html[data-motion] .image {
 
 html[data-motion] .curtain {
   transform: scaleY(1);
+}
+
+/* Tele lontane: si scaricano solo quando si avvicinano (loadWhenNear) */
+html[data-motion] .item:not([data-near]) .image {
+  display: none;
 }
 </style>

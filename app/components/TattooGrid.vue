@@ -74,8 +74,9 @@ useMotion(grid, (motion) => {
     once: true,
     onEnter: batch => reveal?.(batch as HTMLElement[], batch.some(isInViewport) ? 0.35 : 0),
   })
+  const stopLoading = loadWhenNear(gsap.utils.toArray('.tile'))
 
-  if (!canHover()) return
+  if (!canHover()) return stopLoading
 
   // Hover: la card si inclina verso il mouse e la foto si avvicina.
   // Delegato sulla griglia, così vale per tutte le card anche dopo i filtri.
@@ -123,6 +124,7 @@ useMotion(grid, (motion) => {
   root.addEventListener('pointerover', over)
   root.addEventListener('pointerout', out)
   return () => {
+    stopLoading()
     root.removeEventListener('pointermove', move)
     root.removeEventListener('pointerover', over)
     root.removeEventListener('pointerout', out)
@@ -193,6 +195,7 @@ watch(
               sizes="xs:50vw md:33vw lg:400px"
               :loading="priority && index < 2 ? 'eager' : 'lazy'"
               :fetchpriority="priority && index === 0 ? 'high' : undefined"
+              :preload="priority && index === 0 ? { fetchPriority: 'high' } : undefined"
               class="image"
             />
             <span class="curtain" aria-hidden="true" />
@@ -233,6 +236,8 @@ watch(
 .card {
   position: relative;
   display: block;
+  /* il box è della card, non della foto: la foto può partire in display:none */
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--line);
   will-change: transform;
@@ -240,8 +245,13 @@ watch(
 
 .image {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  height: 100%;
   object-fit: cover;
+}
+
+/* Foto lontane dallo schermo: si scaricano solo quando si avvicinano (loadWhenNear) */
+html[data-motion] .tile:not([data-near]) .image[loading='lazy'] {
+  display: none;
 }
 
 /* Telo d'entrata: il fondo arrotondato lo fa sembrare una goccia che risale */
